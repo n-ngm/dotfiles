@@ -15,8 +15,9 @@
     brgc = branch-gc
     ac = ai-commit
     ace = ai-commit -e
-    acjp = ai-commit-jp
-    acejp = ai-commit-jp -e
+    acen = ai-commit -e --lang en
+    acjp = ai-commit --lang jp
+    acejp = ai-commit --lang jp -e
     down = download
     branch-gc = ! git branch --merged | egrep -v '(^\\*|master|main|dev)' | xargs git branch -d
     branch-delete-both = "!sh -c 'git push origin :$1 ; git branch -D $1' -"
@@ -24,8 +25,7 @@
     download = "!sh -c 'git checkout -b $1 origin/$1' -"
     empty-commit = commit --allow-empty
     archive-log = "!sh -c 'git log -p --all --full-history -- $1' -"
-    ai-commit = ! git commit -m \"$(ai-commit-message)\"
-    ai-commit-jp = ! git commit -m \"$(ai-commit-message -l jp)\"
+    ai-commit-jp = ai-commit --lang jp
     create-pull-request = ! gh pr create --base $(git remote show origin | grep 'HEAD branch' | awk '{print $NF}') -w
     recreate-pull-request = ! recreate-pull-request
 [color]
