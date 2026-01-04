@@ -1,28 +1,37 @@
-alias g='git '
-alias a='git add '
-alias b='git branch --sort=committerdate '
-alias c='git checkout '
-alias d='git diff '
-alias s='git status '
-alias gpc='gh pr create '
-
-alias e='vim '
+# One character shortcuts
+alias a='git add'
+alias b='git branch --sort=committerdate'
+alias c='git checkout'
+alias d='git diff'
+alias e='vim'
 alias f='find . '
+alias g='git'
 alias l='ls -la '
-alias cc='chatgpt-cli '
+alias s='git status'
 
-alias shell='exec $SHELL -l'
-alias sed='gsed '
-alias vim='nvim '
+# General useful aliases
+alias reload='exec $SHELL -l'
+alias ls="LC_COLLATE=C $(brew --prefix)/bin/gls --group-directories-first --color=auto" # needs GNU ls -> brew install coreutils
+alias sed='gsed' # needs GNU sed -> brew install gnu-sed
+alias grep='ggrep --color=auto' # needs GNU grep -> brew install grep
+
+
+alias vim='nvim'
 alias vimdff='nvim -d '
+alias lazyvim='NVIM_APPNAME=lazyvim nvim'
+alias lvim='NVIM_APPNAME=lazyvim nvim'
 
+# git aliases
+alias gpc='gh pr create -w '
+
+# Docker aliases
 alias dc='docker compose '
 alias dcu='(cd dockerdev && docker compose up -d) || docker compose up -d'
 alias dcd='docker compose down'
 alias dcr='(cd dockerdev && docker compose run --rm runner) || docker compose run --rm runner '
 alias dcrst='docker compose restart'
-alias dcbe='docker compose run --rm runner bundle exec '
-alias dcbi='docker compose run --rm runner bundle install '
 
-alias phpcs='php vendor/bin/phpcs --report=diff --standard=./rulesets/phpcs.xml '
+# Load local aliases if the file exists
+source ~/.alias.local 2> /dev/null || true
+
 
