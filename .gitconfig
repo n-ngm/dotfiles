@@ -1,4 +1,5 @@
 [alias]
+    ap = add -p
     br = branch
     df = diff -w
     st = status
@@ -7,7 +8,7 @@
     cm = "!sh -c 'git commit -m \"$1\"' -"
     rs = reset
     rb = reset --soft HEAD^
-    ps = ! git push origin `git branch --contains=HEAD | awk '{print $2}'`
+    ps = ! git push -u origin `git branch --contains=HEAD | awk '{print $2}'`
     gr = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
     stt = status -uno
     dfs = diff --staged -w
@@ -39,5 +40,8 @@
     editor = nvim
     autocrlf = input
     pager = "less -FRX"
+[init]
+    defaultBranch = main
 [include]
     path = ~/.gitconfig.local
+
