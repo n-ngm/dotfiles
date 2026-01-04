@@ -102,11 +102,13 @@ nmap * *N
 " Buffre Close
 nnoremap <Leader>d :bp<bar>sp<bar>bn<bar>bd<bar>bn<CR>
 " Chrome Reload
-nnoremap <Leader>r :ChromeReload<CR><C-l>
+nnoremap <Leader>cr :ChromeReload<CR><C-l>
 " let g:user_emmet_leader_key='<c-t>'
-nnoremap <Leader>c :SyntasticCheck<CR>
+nnoremap <Leader>sc :SyntasticCheck<CR>
 " calc
-nnoremap <LEADER>a :call Calc()<CR>
+nnoremap <LEADER>ca :call Calc()<CR>
+" copilot chat
+" nnoremap :cp :CopilotChat<CR>
 
 " buffer
 nnoremap <C-p> :bp<CR>
@@ -126,6 +128,9 @@ nnoremap s "_s
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
+" vnoremap y :set clipboard+=unnamed<CR>y<CR>:set clipboard-=unnamed<CR>
+":let @+=@0
+vnoremap y "+y
 " vim-airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme='jellybeans'
@@ -204,3 +209,11 @@ let g:vdebug_keymap = {
 
 imap <M-DOWN> <Plug>(copilot-next)
 imap <M-UP> <Plug>(copilot-previous)
+
+:lua require('copilot_chat_config.init')
+
+" Find files using Telescope command-line sugar.
+nnoremap <Leader>ff <cmd>Telescope find_files<cr>
+nnoremap <Leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <Leader>fb <cmd>Telescope buffers<cr>
+nnoremap <Leader>fh <cmd>Telescope help_tags<cr>

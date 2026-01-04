@@ -50,7 +50,7 @@ while true; do
     git add --interactive
 
     # if operations end, then git commit
-    git ai-commit -e
+    git ai-commit-jp -e
 
     # if commit is successful, then push the new branch to the remote
     git push origin $branch_name
