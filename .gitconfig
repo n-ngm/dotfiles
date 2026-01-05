@@ -1,19 +1,20 @@
 [alias]
     ap = add -p
     br = branch
-    df = diff -w
-    st = status
-    co = checkout
+    brgc = branch-gc
     cb = "!sh -c 'git stash && git checkout $1 && git stash pop' -"
     cm = "!sh -c 'git commit -m \"$1\"' -"
-    rs = reset
-    rb = reset --soft HEAD^
-    ps = ! git push -u origin `git branch --contains=HEAD | awk '{print $2}'`
-    gr = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
-    stt = status -uno
+    co = checkout
+    df = diff -w
     dfs = diff --staged -w
     dfw = diff --word-diff
-    brgc = branch-gc
+    gr = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
+    ps = ! git push -u origin `git branch --contains=HEAD | awk '{print $2}'`
+    rb = reset --soft HEAD^
+    rs = reset
+    st = status
+    stt = status -uno
+    ui = "!gitui"
     ac = ai-commit
     ace = ai-commit -e
     acen = ai-commit -e --lang en
@@ -39,9 +40,14 @@
 [core]
     editor = nvim
     autocrlf = input
-    pager = "less -FRX"
+    # pager = "less -FRX"
+    pager = delta
 [init]
     defaultBranch = main
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true
+    side-by-side = true
 [include]
     path = ~/.gitconfig.local
-
