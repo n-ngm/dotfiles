@@ -10,7 +10,6 @@ tap "icu4c/taps"
 tap "jesseduffield/lazydocker"
 tap "n-ngm/tap"
 tap "neovim/neovim"
-tap "sidneys/homebrew"
 tap "sst/tap"
 tap "tsub/s3-edit"
 tap "universal-ctags/universal-ctags"
@@ -22,13 +21,13 @@ brew "zsh-completions"
 brew "zplug"
 brew "tmux"
 brew "zellij"
-brew "expect"
 
 # ============================================
 # CLI Utilities
 # ============================================
 brew "bat"
 brew "eza"
+brew "expect"
 brew "fd"
 brew "findutils"
 brew "fzf"
@@ -159,12 +158,6 @@ brew "openssl@1.1"
 brew "icu4c/taps/icu4c@68"
 
 # ============================================
-# Python Libraries
-# ============================================
-brew "pycparser"
-brew "cffi"
-
-# ============================================
 # Text & Data Processing
 # ============================================
 brew "jq"
@@ -187,11 +180,6 @@ brew "cdrtools"
 brew "wimlib"
 brew "dnsmasq"
 brew "terminal-notifier"
-brew "sidneys/homebrew/chntpw"
-
-# ============================================
-# AWS & Cloud Storage
-# ============================================
 
 # ============================================
 # Casks - CLI Tools
