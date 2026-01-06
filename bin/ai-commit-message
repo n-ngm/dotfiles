@@ -1,55 +1,87 @@
-#!/bin/sh -eu
+#!/bin/bash -eu
 
-function usage {
-  echo "Usage: ai-commit-message [OPTIONS]"
+usage() {
+  echo "Usage: git-ai-commit [OPTIONS]"
   echo ""
   echo "Generate git commit message from staged diff using GhatGPT."
   echo "Options:"
-  echo "  -l,--lang LANG          Language for output (default: en)"
-  echo "  -b,--body-lines NUMBER  Add number of bullet points for body (default: 0)"
-  echo "  -n,--non-interactive    Do not prompt for confirmation (default: no)"
+  echo "  --api-key API_KEY    OpenAI API key (default: \$OPENAI_API_KEY environmental variable)"
+  echo "  --model MODEL        OpenAI model (default: gpt-4o-mini)"
+  echo "  --temperature TEMP   OpenAI Temperature for sampling (default: 0.7)"
+  echo "  --lang LANG          Language for output (default: \$LANG environmental variable else en-US)"
+  echo "  --body-lines NUMBER  Number of lines for body (default: 0 = none)"
+  echo "  --non-interactive    Do not prompt for confirmation (default: no)"
+  echo "  --help               Show this help message"
 }
+
+# require curl, jq
+if ! command -v curl >/dev/null; then
+  echo "curl command is required. please install curl." >&2
+  exit 1
+fi
+if ! command -v jq >/dev/null; then
+  echo "jq command is required. please install jq." >&2
+  exit 1
+fi
 
 # set options
 OPTION_LANG=""
 OPTION_BODY_LINES=""
 OPTION_INTERACTIVE=""
-while [[ $# -gt 0 ]]; do
+OPTION_GIT_COMMIT=()
+while [ $# -gt 0 ]; do
   case "$1" in
-    -l|--lang)
+    --api-key)
+      OPENAI_API_KEY=$2
+      shift 2
+      ;;
+    --model)
+      OPTION_MODEL=$2
+      shift 2
+      ;;
+    --temperature)
+      OPTION_TEMPERATURE=$2
+      shift 2
+      ;;
+    --lang)
       OPTION_LANG=$2
       shift 2
       ;;
-    -b|--body-lines)
+    --body-lines)
       OPTION_BODY_LINES=$2
       shift 2
       ;;
-    -n|--non-interactive)
+    --non-interactive)
       OPTION_INTERACTIVE='none'
-      shift 1
+      shift 2
       ;;
-    -h|--help)
+    --help)
       usage
       exit 0
       ;;
     *)
-      echo "Unknown option: $1"
-      usage
-      exit 1
+      OPTION_GIT_COMMIT+=("$1")
+      shift
       ;;
   esac
 done
 
-PROMPT_LANG=""
-PROMPT_BODY=""
-if [ ! -z "$OPTION_LANG" ]; then
-  PROMPT_LANG="output must be in ${OPTION_LANG} language."
+if [ -z "${OPENAI_API_KEY:-}" ]; then
+  echo "OpenAI_API_key is required. Please set OPENAI_API_KEY environmental variable or use -k option." >&2
+  exit 1
 fi
-if [ ! -z "$OPTION_BODY_LINES" ]; then
-  PROMPT_BODY="add summarized description, in under ${OPTION_BODY_LINES} bullet points, open empty line before description."
+PROMPT_LANG="output must be in lang: ${OPTION_LANG:-${LANG:-en-US}}"
+
+PROMPT_BODY=""
+if [ ! -z "${OPTION_BODY_LINES:-}" ]; then
+  PROMPT_BODY="add description, in under ${OPTION_BODY_LINES} bullet points, open empty line before description."
 fi
 
 # get diff
+if ! git status >/dev/null ; then
+  exit 1
+fi
+
 GIT_DIFF=$(git diff --staged)
 if [ -z "$GIT_DIFF" ]; then
   echo "No changes to commit. git add some changes and try again."
@@ -57,45 +89,109 @@ if [ -z "$GIT_DIFF" ]; then
 fi
 
 # query gpt
-function query_gpt {
+query_gpt() {
   # prompt for ai
   PROMPT=$(cat <<EOL
-generate git commit message from below diff, in one sentences.
-the first sentence must follow format: <type>: <subject>
+generate git commit message from below diff. focus on changes, summarize changes with appropriate length, in one sentence,
+must follow format: <type>: <subject>
   type const: feat, fix, docs, style, refactor, test, chore
-${PROMPT_BODY}
 ${PROMPT_LANG}
+${PROMPT_BODY}
 --
 ${GIT_DIFF}
 --
 EOL
-  )
+)
+
+  QUERY=$(jq -n --arg content "$PROMPT" '{"role": "user", "content": $content}')
 
   # generate commit message
   # remove quotes
-  echo "$PROMPT" | chatgpt-cli -n 2>/dev/null | tr -d "'\""
+  ANSWER=$(curl https://api.openai.com/v1/chat/completions -s \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer ${OPENAI_API_KEY}" \
+    -d "{\"model\": \"${OPTION_MODEL:-gpt-4o-mini}\",
+         \"temperature\": ${OPTION_TEMPERATURE:-0.7},
+         \"max_tokens\": 1000,
+         \"messages\": [${QUERY}]}")
+
+  if [ -z "${ANSWER:-}" ]; then
+    echo "Failed to get response from OpenAI API." >&2
+    exit 1
+  fi
+
+  if [ "$(echo "$ANSWER" | jq -e 'has("error")')" = "true" ]; then
+    echo "$ANSWER" | jq -r '.error.message' >&2
+    exit 1
+  fi
+
+  echo "$ANSWER" | jq -r '.choices[0].message.content'
+}
+query_ollama() {
+  # prompt for ai
+  PROMPT=$(cat <<EOL
+/no_think
+generate git commit message from DIFF.
+
+- you must wrap message with result tag:
+  <message>message</message>
+
+- in one line, no introduction, no decoration, no note, no quotation.
+
+- message must use format: <type>: <subject>
+  you choose best type from |feat|fix|docs|style|refactor|test|chore
+
+- you should include in subject: purpose, comments, overview of the change
+
+- ${PROMPT_LANG}
+
+- ${PROMPT_BODY}
+
+DIFF
+-------------------------------
+${GIT_DIFF}
+-------------------------------
+EOL
+)
+  ANSWER=$(ollama run ${OPTION_MODEL:-qwen3:8b} "$PROMPT")
+
+  if [ -z "${ANSWER:-}" ]; then
+    echo "Failed to get response from Ollama API." >&2
+    exit 1
+  fi
+
+  MESSAGE=$(echo "$ANSWER" | grep -oE '<message>[^<]+</message>'|sed 's#<message>\(.*\)</message>#\1#')
+  echo "$MESSAGE"
 }
 
-MESSAGE=$(query_gpt)
+MESSAGE=$(query_ollama)
 
 if [ ! -z "$OPTION_INTERACTIVE" ]; then
-  echo "$MESSAGE"
+  if [ ${#OPTION_GIT_COMMIT[@]} -eq 0 ]; then
+    git commit -m "$MESSAGE"
+  else
+    git commit -m "$MESSAGE" "${OPTION_GIT_COMMIT[@]}"
+  fi
   exit 0
 fi
 
 echo "$MESSAGE" >&2
 while true; do
-  read -p "OK ? [y/n/q]: " ANS
-  case "$ANS" in
+  read -p "OK ? [y/n/q]: " CONFIRM
+  case "$CONFIRM" in
     n)
-      MESSAGE=$(query_gpt)
+      MESSAGE=$(query_ollama)
       echo "$MESSAGE" >&2
       ;;
     q)
-      exit 0
+      break
       ;;
     *)
-      echo "$MESSAGE"
+      if [ ${#OPTION_GIT_COMMIT[@]} -eq 0 ]; then
+        git commit -m "$MESSAGE"
+      else
+        git commit -m "$MESSAGE" "${OPTION_GIT_COMMIT[@]}"
+      fi
       break
       ;;
   esac
