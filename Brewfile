@@ -1,3 +1,6 @@
+# ============================================
+# Taps
+# ============================================
 tap "1password/tap"
 tap "aws/tap"
 tap "heroku/brew"
@@ -11,120 +14,205 @@ tap "sidneys/homebrew"
 tap "sst/tap"
 tap "tsub/s3-edit"
 tap "universal-ctags/universal-ctags"
-brew "anyenv"
-brew "libpng"
-brew "xz"
-brew "zstd"
-brew "libtiff"
-brew "little-cms2"
-brew "webp"
-brew "jpeg-xl"
-brew "aom"
-brew "autoconf"
-brew "automake"
-brew "libyaml"
-brew "aws-sso-util"
-brew "awscli"
-brew "libssh2"
-brew "oniguruma"
-brew "bat"
-brew "bison"
-brew "cabextract"
-brew "gettext"
-brew "cdrtools"
-brew "pycparser"
-brew "cffi"
-brew "circleci"
-brew "cmake"
-brew "colima", restart_service: :changed
-brew "gmp"
-brew "coreutils"
-brew "curl"
-brew "deno"
-brew "direnv"
-brew "dnsmasq"
-brew "docker"
-brew "docker-buildx"
-brew "docker-compose"
-brew "docutils"
+
+# ============================================
+# Shell & Terminal
+# ============================================
+brew "zsh-completions"
+brew "zplug"
+brew "tmux"
+brew "zellij"
 brew "expect"
+
+# ============================================
+# CLI Utilities
+# ============================================
+brew "bat"
 brew "eza"
 brew "fd"
-brew "libevent"
 brew "findutils"
 brew "fzf"
-brew "gemini-cli"
-brew "gh"
-brew "openjpeg"
-brew "ghostscript"
+brew "grep"
+brew "ripgrep"
+brew "tree"
+brew "watch"
+brew "wget"
+brew "curl"
+brew "coreutils"
+brew "gnu-sed"
+brew "parallel"
+brew "zoxide"
+brew "telnet"
+brew "nkf"
+
+# ============================================
+# Git & Version Control
+# ============================================
 brew "git"
 brew "git-delta"
 brew "git-lfs"
 brew "git-now"
 brew "gitui"
-brew "gnu-sed"
-brew "grep"
+brew "gh"
+
+# ============================================
+# Development Environment Managers
+# ============================================
+brew "anyenv"
+brew "direnv"
+brew "ruby-build"
+
+# ============================================
+# Programming Languages & Runtimes
+# ============================================
+brew "python@3.10"
+brew "python@3.11"
+brew "python@3.12"
+brew "rust"
+brew "deno"
+
+# ============================================
+# Database & Data Tools
+# ============================================
+brew "mysql-client"
+brew "redis" # redis-cli
+brew "sqlite-utils"
+
+# ============================================
+# Container & Virtualization
+# ============================================
+brew "colima", restart_service: :changed
+brew "docker"
+brew "docker-buildx"
+brew "docker-compose"
+brew "jesseduffield/lazydocker/lazydocker"
+
+# ============================================
+# Cloud & DevOps
+# ============================================
+brew "awscli"
+brew "aws-sso-util"
+brew "aws/tap/copilot-cli"
+brew "tsub/s3-edit/s3-edit"
+brew "circleci"
+brew "heroku/brew/heroku"
+
+# ============================================
+# Build Tools & Compilers
+# ============================================
+brew "autoconf"
+brew "automake"
+brew "bison"
+brew "cmake"
+brew "libtool"
 brew "pkgconf"
+brew "re2c"
+brew "protobuf"
+
+# ============================================
+# AI & LLM Tools
+# ============================================
+brew "llm"
+brew "gemini-cli"
+brew "ollama", restart_service: :always
+
+# ============================================
+# Image Processing
+# ============================================
+brew "imagemagick"
+brew "ghostscript"
+brew "terminalimageviewer"
+
+# ============================================
+# Image Libraries
+# ============================================
+brew "libpng"
+brew "libtiff"
+brew "jpeg"
+brew "jpeg-xl"
+brew "webp"
+brew "libavif"
 brew "libheif"
 brew "libraw"
-brew "libtool"
-brew "imagemagick"
-brew "jpeg"
-brew "libavif"
+brew "openjpeg"
+brew "aom"
+brew "little-cms2"
+
+# ============================================
+# System Libraries
+# ============================================
+brew "xz"
+brew "zstd"
+brew "zlib"
+brew "gettext"
+brew "gmp"
+brew "libevent"
+brew "libyaml"
+brew "libssh2"
+brew "oniguruma"
 brew "libedit"
 brew "libfido2"
 brew "libiconv"
-brew "libpq"
 brew "libsass"
 brew "libzip"
-brew "llm"
-brew "zlib"
-brew "mysql-client"
-brew "neovim"
-brew "nkf"
-brew "opencode"
-brew "python@3.12"
 brew "openssl@1.1"
-brew "parallel"
-brew "postgresql@14"
-brew "protobuf"
-brew "python@3.10"
-brew "python@3.11"
-brew "re2c"
-brew "redis"
-brew "ripgrep"
-brew "ruby-build"
-brew "rust"
-brew "sqlite-utils"
-brew "telnet"
-brew "terminal-notifier"
-brew "terminalimageviewer"
-brew "tidy-html5"
-brew "tmux"
-brew "tree"
-brew "universal-ctags", args: ["HEAD"]
-brew "vips"
-brew "watch"
-brew "wget"
-brew "wimlib"
+brew "icu4c/taps/icu4c@68"
+
+# ============================================
+# Python Libraries
+# ============================================
+brew "pycparser"
+brew "cffi"
+
+# ============================================
+# Text & Data Processing
+# ============================================
+brew "jq"
 brew "xq"
 brew "yq"
-brew "zellij"
-brew "zoxide"
-brew "zplug"
-brew "zsh-completions"
-brew "aws/tap/copilot-cli"
-brew "heroku/brew/heroku"
-brew "icu4c/taps/icu4c@68"
-brew "jesseduffield/lazydocker/lazydocker"
-brew "n-ngm/tap/git-ai-commit"
+brew "docutils"
+
+# ============================================
+# Editors & IDEs
+# ============================================
+brew "neovim"
+brew "universal-ctags", args: ["HEAD"]
+brew "opencode"
+
+# ============================================
+# System Utilities
+# ============================================
+brew "cabextract"
+brew "cdrtools"
+brew "wimlib"
+brew "dnsmasq"
+brew "terminal-notifier"
 brew "sidneys/homebrew/chntpw"
-brew "tsub/s3-edit/s3-edit"
+
+# ============================================
+# AWS & Cloud Storage
+# ============================================
+
+# ============================================
+# Casks - CLI Tools
+# ============================================
 cask "1password-cli"
-cask "alacritty"
-cask "anaconda"
-cask "claude-code"
 cask "gcloud-cli"
-cask "miniconda"
+
+# ============================================
+# Casks - Development Tools
+# ============================================
+cask "alacritty"
+cask "claude-code"
 cask "mitmproxy"
+
+# ============================================
+# Casks - Python Environments
+# ============================================
+cask "anaconda"
+cask "miniconda"
+
+# ============================================
+# Casks - Utilities
+# ============================================
 cask "notunes"
