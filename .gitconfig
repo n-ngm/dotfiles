@@ -21,7 +21,7 @@
     acjp = ai-commit --lang jp
     acejp = ai-commit --lang jp -e
     down = download
-    branch-gc = ! git branch --merged | egrep -v '(^\\*|master|main|dev)' | xargs git branch -d
+    branch-gc = ! git branch --merged | grep -E -v '(^\\*|master|main|dev)' | xargs git branch -d
     branch-delete-both = "!sh -c 'git push origin :$1 ; git branch -D $1' -"
     upstream = "!sh -c 'git branch --set-upstream-to=origin/$1 $1' -"
     download = "!sh -c 'git checkout -b $1 origin/$1' -"
