@@ -53,6 +53,7 @@ brew "git-lfs"
 brew "git-now"
 brew "gitui"
 brew "gh"
+brew "repo"
 
 # ============================================
 # Development Environment Managers
