@@ -10,6 +10,7 @@ ln -snf $SCRIPT_DIR/.zshrc     .zshrc
 ln -snf $SCRIPT_DIR/.alias     .alias
 ln -snf $SCRIPT_DIR/.p10k.zsh  .p10k.zsh
 ln -snf $SCRIPT_DIR/.Brewfile  .Brewfile
+ln -snf $SCRIPT_DIR/.claude    .claude
 
 cd $HOME
 mkdir -p .config/nvim
