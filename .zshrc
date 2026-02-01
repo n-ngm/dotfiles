@@ -148,3 +148,6 @@ function precmd() {
         tmux refresh-client -S
     fi
 }
+
+# Added by Antigravity
+export PATH="$HOME/.antigravity/antigravity/bin:$PATH"

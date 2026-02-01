@@ -14,7 +14,8 @@ alias reload='exec $SHELL -l'
 alias ls="LC_COLLATE=C $(brew --prefix)/bin/gls --group-directories-first --color=auto" # needs GNU ls -> brew install coreutils
 alias sed='gsed' # needs GNU sed -> brew install gnu-sed
 alias grep='ggrep --color=auto' # needs GNU grep -> brew install grep
-
+alias strip-comment="sed -e 's|//.*||' -e 's|/\*.*\*/||g'"
+alias terminalizer='npx terminalizer'
 
 alias vim='nvim'
 alias vimdff='nvim -d '
@@ -30,6 +31,10 @@ alias dcu='(cd dockerdev && docker compose up -d) || docker compose up -d'
 alias dcd='docker compose down'
 alias dcr='(cd dockerdev && docker compose run --rm runner) || docker compose run --rm runner '
 alias dcrst='docker compose restart'
+alias dcsd='docker stop $(docker ps -q)'
+
+# Claude and Ollama
+alias claude-ollama='ANTHROPIC_AUTH_TOKEN=ollama ANTHROPIC_BASE_URL=http://localhost:11434 claude --model=gpt-oss:20b'
 
 # Load local aliases if the file exists
 source ~/.alias.local 2> /dev/null || true
