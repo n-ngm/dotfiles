@@ -1,0 +1,105 @@
+{
+  "env": {},
+  "permissions": {
+    "allow": [
+      "Bash",
+      "WebFetch(domain:*.github.com)",
+      "mcp__voicevox__speak",
+      "Read(**/.claude/scripts/voicebox/*)"
+    ],
+    "deny": [
+      "Bash(sudo:*)",
+      "Read(id_rsa)",
+      "Read(id_ed25519)",
+      "Read(**/*token*)",
+      "Read(.env)"
+    ],
+    "ask": [
+      "WebFetch(domain:*)",
+      "Bash(git push:*)",
+      "Bash(git revert:*)",
+      "Read(**/*key*)",
+      "Bash(rm:*)",
+      "Bash(rm -rf:*)"
+    ]
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/voicebox/voicevox-notify.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ccm hook Notification"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/voicebox/voicevox-notify.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ccm hook Stop"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ccm hook UserPromptSubmit"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ccm hook PreToolUse"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ccm hook PostToolUse"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "peraichi-ai-kit@peraichi-ai-marketplace": true,
+    "context7@claude-plugins-official": true,
+    "pai@peraichi-ai-marketplace": true
+  }
+}
