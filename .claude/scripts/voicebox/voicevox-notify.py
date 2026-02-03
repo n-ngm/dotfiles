@@ -88,8 +88,8 @@ def extract_session_title(transcript_path: str) -> str:
     return title
 
 
-def extract_last_assistant_message(transcript_path: str, max_chars: int = 100) -> str | None:
-    """Extract text from the last assistant message in transcript."""
+def extract_last_assistant_message(transcript_path: str) -> str | None:
+    """Extract first line of text from the last assistant message in transcript."""
     if not transcript_path or not os.path.exists(transcript_path):
         return None
 
@@ -102,10 +102,10 @@ def extract_last_assistant_message(transcript_path: str, max_chars: int = 100) -
                 data = json.loads(line)
                 if data.get("type") == "assistant":
                     content = data.get("message", {}).get("content", [])
-                    for item in content:
-                        if item.get("type") == "text":
-                            text = item.get("text", "")[:max_chars]
-                            return text
+                    if content and content[0].get("type") == "text":
+                        # Get first line only (matches shell's head -1)
+                        text = content[0].get("text", "")
+                        return text.split("\n")[0]
             except json.JSONDecodeError:
                 continue
     except Exception:
