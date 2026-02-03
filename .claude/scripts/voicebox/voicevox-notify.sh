@@ -7,8 +7,27 @@
 #   - Stop: Task completion notification (reads last assistant message from transcript)
 #   - Notification (idle_prompt): User input waiting notification
 
-SPEAKER=1
-SPEED=1.3
+# Load speaker config from JSON file based on current_speaker.conf
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+CURRENT_SPEAKER_CONF="${SCRIPT_DIR}/current_speaker.conf"
+
+# Read speaker ID from conf file (default: 1)
+if [ -f "$CURRENT_SPEAKER_CONF" ]; then
+  SPEAKER_ID=$(cat "$CURRENT_SPEAKER_CONF" | tr -d '[:space:]')
+fi
+SPEAKER_ID="${SPEAKER_ID:-1}"
+
+# Load speaker config JSON
+SPEAKER_CONFIG="${SCRIPT_DIR}/speaker_$(printf '%03d' "$SPEAKER_ID").json"
+
+if [ -f "$SPEAKER_CONFIG" ]; then
+  SPEAKER=$(jq -r '.speaker_id // 1' "$SPEAKER_CONFIG")
+  SPEED=$(jq -r '.speed // 1.3' "$SPEAKER_CONFIG")
+else
+  SPEAKER=1
+  SPEED=1.3
+fi
+
 HOST="http://localhost:50021"
 
 # Read JSON from stdin
