@@ -114,9 +114,21 @@ esac
 
 TEXT="${MESSAGE:-通知なのだ}"
 
-# Temp file for audio
-TMPFILE=$(mktemp -p /tmp voicevox.XXXXXX.wav)
-trap "rm -f $TMPFILE" EXIT
+# Temp file for audio (with retry for race conditions)
+TMPFILE=""
+for i in 1 2 3; do
+  TMPFILE=$(mktemp /tmp/voicevox.$$.XXXXXX.wav 2>/dev/null) && break
+  sleep 0.1
+done
+if [ -z "$TMPFILE" ] || [ ! -f "$TMPFILE" ]; then
+  # Fallback: use PID and timestamp
+  TMPFILE="/tmp/voicevox.$$.$(date +%s%N).wav"
+  touch "$TMPFILE" 2>/dev/null || {
+    echo "Error: Cannot create temp file" >&2
+    exit 1
+  }
+fi
+trap "rm -f '$TMPFILE'" EXIT
 
 # URL encode the text
 ENCODED=$(echo -n "$TEXT" | jq -sRr '@uri')
