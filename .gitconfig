@@ -40,15 +40,13 @@
 [core]
     editor = nvim
     autocrlf = input
-    # pager = "less -FRX"
-    pager = delta
+    pager = "sh -c 'if [ $(tput cols) -ge 160 ]; then delta --side-by-side; else less -FRX ; fi'"
 [init]
     defaultBranch = main
 [interactive]
     diffFilter = delta --color-only
 [delta]
     navigate = true
-    side-by-side = true
 [include]
     path = ~/.gitconfig.local
 [url "git@github.com:"]
