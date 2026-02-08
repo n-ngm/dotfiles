@@ -4,4 +4,3 @@
 !.gitignore
 !/scripts/
 !/scripts/voicebox/
-!/scripts/voicebox/**
