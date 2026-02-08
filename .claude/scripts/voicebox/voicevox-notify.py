@@ -22,19 +22,22 @@ import requests
 import yaml
 
 SCRIPT_DIR = Path(__file__).parent
-CURRENT_SPEAKER_CONF = SCRIPT_DIR / "current_speaker.conf"
+SPEAKERS_DIR = SCRIPT_DIR / "speakers"
+CURRENT_SPEAKER_YAML = SPEAKERS_DIR / "current.yaml"
 VOICEVOX_HOST = "http://localhost:50021"
+DEFAULT_SPEED = 1.3
 
 
-def load_speaker_config(speaker_id: int) -> dict:
-    """Load speaker configuration from YAML file."""
-    config_path = SCRIPT_DIR / f"speaker_{speaker_id:03d}.yaml"
-    if config_path.exists():
-        with open(config_path, "r", encoding="utf-8") as f:
-            return yaml.safe_load(f)
+def load_current_speaker_config() -> dict:
+    """Load current speaker configuration from speakers/current.yaml symlink."""
+    if CURRENT_SPEAKER_YAML.exists():
+        with open(CURRENT_SPEAKER_YAML, "r", encoding="utf-8") as f:
+            config = yaml.safe_load(f)
+            if config:
+                return config
     # Default config
     return {
-        "voice": {"speaker_id": 1, "speed": 1.3},
+        "styles": [{"id": 1, "name": "ノーマル", "default": True}],
         "notifications": {
             "default": "通知",
             "task_complete": "タスク完了",
@@ -45,15 +48,16 @@ def load_speaker_config(speaker_id: int) -> dict:
     }
 
 
-def get_current_speaker_id() -> int:
-    """Read current speaker ID from conf file."""
-    if CURRENT_SPEAKER_CONF.exists():
-        content = CURRENT_SPEAKER_CONF.read_text().strip()
-        try:
-            return int(content)
-        except ValueError:
-            pass
-    return 1  # Default
+def get_default_speaker_id(config: dict) -> int:
+    """Get the default style speaker_id from config."""
+    styles = config.get("styles", [])
+    for style in styles:
+        if style.get("default"):
+            return style.get("id", 1)
+    # Fallback to first style
+    if styles:
+        return styles[0].get("id", 1)
+    return 1
 
 
 def extract_session_title(transcript_path: str) -> str:
@@ -231,12 +235,9 @@ def main():
     transcript_path = input_data.get("transcript_path")
 
     # Load speaker config
-    speaker_id = get_current_speaker_id()
-    config = load_speaker_config(speaker_id)
-
-    voice_config = config.get("voice", {})
-    voicevox_speaker_id = voice_config.get("speaker_id", 1)
-    speed = voice_config.get("speed", 1.3)
+    config = load_current_speaker_config()
+    voicevox_speaker_id = get_default_speaker_id(config)
+    speed = DEFAULT_SPEED
     notifications = config.get("notifications", {})
 
     # Process message
