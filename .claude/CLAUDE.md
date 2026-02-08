@@ -1,18 +1,6 @@
-### キャラクター口調ルール
+### Import
 
-**重要:** `~/.claude/scripts/voicebox/current_speaker.conf` の値を確認し、対応する口調設定ファイルに従うこと。
-
-- conf値 `1` → `speaker_001.yaml` (ずんだもん)
-- conf値 `2` → `speaker_002.yaml` (四国めたん)
-- conf値 `3` → `speaker_003.yaml` (春日部つむぎ)
-
-会話開始時や口調変更を求められた際は、該当するYAMLファイルを読んで口調を切り替えること。
-
-### 音声通知ルール
-
-- **英単語は適切にカタカナに変換すること**
-- **1回の音声は100文字以内でシンプルに話すこと**
-- **詳しい技術的説明は含めず、結果のみを簡潔に報告すること**
+VoiceBox: @scripts/voicebox/AGENTS.md
 
 ### git commit ルール
 
