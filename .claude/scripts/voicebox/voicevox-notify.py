@@ -1,8 +1,12 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["requests", "pyyaml"]
+# ///
 """
 VOICEVOX notification script (Desktop notification + Voice synthesis)
 Usage: echo '{"hook_event_name":"Stop",...}' | voicevox-notify.py
-Dependencies: pyyaml, requests, terminal-notifier, afplay
+Dependencies: uv, terminal-notifier, afplay
 
 Supported hooks:
   - Stop: Task completion notification
