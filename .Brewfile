@@ -108,13 +108,14 @@ brew "libtool"
 brew "pkgconf"
 brew "re2c"
 brew "protobuf"
+brew "pnpm"
 
 # ============================================
 # AI & LLM Tools
 # ============================================
 brew "llm"
 brew "gemini-cli"
-brew "ollama", restart_service: :always
+# brew "ollama", restart_service: :always # Use Native GUI app.
 
 # ============================================
 # Image Processing

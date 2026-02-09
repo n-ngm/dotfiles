@@ -1,6 +1,21 @@
 # envs
 export LANG=ja_JP.UTF-8
 source "${HOME}/.env"
+
+source $HOME/.local/bin/env 2>/dev/null
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Claude Agent: skip heavy initialization
+if [[ -n "$CLAUDE_AGENT" ]]; then
+  export PATH="$HOME/.bun/bin:$HOME/.local/bin:$HOME/.antigravity/antigravity/bin:$PATH"
+  if [ -e "$HOME/.anyenv" ]; then
+    export PATH="$HOME/.anyenv/bin:$PATH"
+    eval "$(anyenv init -)" 2>/dev/null
+  fi
+  return
+fi
+
 eval "$(direnv hook zsh)"
 
 # zplug
@@ -53,13 +68,6 @@ fi
 # iterm2
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
 
-# Check if `gh` is installed and `gh-copilot` extension is available
-# gh extension install github/gh-copilot
-if command -v gh >/dev/null 2>&1 && gh extension list | grep -q 'gh-copilot'; then
-  eval "$(gh copilot alias zsh)"
-else
-  echo "gh or gh-copilot is not installed. Skipping copilot alias."
-fi
 
 # uv
 source $HOME/.local/bin/env

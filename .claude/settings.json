@@ -1,11 +1,17 @@
 {
-  "env": {},
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "permissions": {
     "allow": [
       "Bash",
       "WebFetch(domain:*.github.com)",
       "mcp__voicevox__speak",
-      "Read(~/.claude/scripts/voicebox/*)"
+      "Read(~/.claude/scripts/voicebox/*)",
+      "mcp__github__get_*",
+      "mcp__github__list_*",
+      "mcp__github__search_*",
+      "mcp__github__pull_request_read"
     ],
     "deny": [
       "Bash(sudo:*)",
@@ -20,7 +26,19 @@
       "Bash(git revert:*)",
       "Read(**/*key*)",
       "Bash(rm:*)",
-      "Bash(rm -rf:*)"
+      "Bash(rm -rf:*)",
+      "mcp__github__add_*",
+      "mcp__github__assign_*",
+      "mcp__github__create_*",
+      "mcp__github__delete_*",
+      "mcp__github__fork_*",
+      "mcp__github__merge_*",
+      "mcp__github__push_*",
+      "mcp__github__pull_request_review_write",
+      "mcp__github__remove_*",
+      "mcp__github__reprioritize_*",
+      "mcp__github__request_*",
+      "mcp__github__update_*"
     ]
   },
   "hooks": {
@@ -31,15 +49,6 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/voicebox/voicevox-notify.py"
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ccm hook Notification"
           }
         ]
       }
@@ -53,53 +62,8 @@
             "command": "~/.claude/scripts/voicebox/voicevox-notify.py"
           }
         ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ccm hook Stop"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ccm hook UserPromptSubmit"
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ccm hook PreToolUse"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ccm hook PostToolUse"
-          }
-        ]
       }
     ]
   },
-  "enabledPlugins": {
-    "peraichi-ai-kit@peraichi-ai-marketplace": true,
-    "context7@claude-plugins-official": true,
-    "pai@peraichi-ai-marketplace": true
-  }
+  "enabledPlugins": {}
 }
