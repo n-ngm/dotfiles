@@ -10,6 +10,18 @@ styles:
   - id: 1
     name: "あまあま"
     default: true
+  - id: 7
+    name: "ツンツン"
+  - id: 5
+    name: "セクシー"
+  - id: 22
+    name: "ささやき"
+  - id: 38
+    name: "ヒソヒソ"
+  - id: 75
+    name: "ヘロヘロ"
+  - id: 76
+    name: "なみだめ"
 
 
 speech_style:
