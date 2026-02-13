@@ -96,10 +96,35 @@ def extract_session_title(transcript_path: str) -> str:
     return title
 
 
-def extract_last_assistant_message(transcript_path: str) -> str | None:
-    """Extract first line of text from the last assistant message in transcript."""
+def extract_speaker_id_from_text(text: str) -> int | None:
+    """Extract speaker_id from the last line if it matches 'speaker_id: <number>'."""
+    lines = text.rstrip().split("\n")
+    if lines:
+        last_line = lines[-1].strip()
+        match = re.match(r"^\(?speaker_id:\s*(\d+)\)?$", last_line)
+        if match:
+            return int(match.group(1))
+    return None
+
+
+def remove_speaker_id_line(text: str) -> str:
+    """Remove the trailing speaker_id line from text."""
+    lines = text.rstrip().split("\n")
+    if lines:
+        last_line = lines[-1].strip()
+        if re.match(r"^\(?speaker_id:\s*\d+\)?$", last_line):
+            return "\n".join(lines[:-1]).rstrip()
+    return text
+
+
+def extract_last_assistant_message(transcript_path: str) -> tuple[str | None, int | None]:
+    """Extract first line of text and speaker_id from the last assistant message in transcript.
+
+    Returns:
+        tuple: (first_line_text, speaker_id_or_None)
+    """
     if not transcript_path or not os.path.exists(transcript_path):
-        return None
+        return None, None
 
     try:
         with open(transcript_path, "r", encoding="utf-8") as f:
@@ -111,15 +136,20 @@ def extract_last_assistant_message(transcript_path: str) -> str | None:
                 if data.get("type") == "assistant":
                     content = data.get("message", {}).get("content", [])
                     if content and content[0].get("type") == "text":
-                        # Get first line only (matches shell's head -1)
-                        text = content[0].get("text", "")
-                        return text.split("\n")[0]
+                        full_text = content[0].get("text", "")
+                        # Extract speaker_id from last line
+                        speaker_id = extract_speaker_id_from_text(full_text)
+                        # Remove speaker_id line before extracting message
+                        clean_text = remove_speaker_id_line(full_text)
+                        # Get first line only
+                        first_line = clean_text.split("\n")[0]
+                        return first_line, speaker_id
             except json.JSONDecodeError:
                 continue
     except Exception:
         pass
 
-    return None
+    return None, None
 
 
 def process_hook_message(
@@ -131,7 +161,7 @@ def process_hook_message(
     """Process hook event and return appropriate message."""
     if hook_event == "Stop":
         if not message:
-            message = extract_last_assistant_message(transcript_path)
+            message, _ = extract_last_assistant_message(transcript_path)
         return message or notifications.get("task_complete", "タスク完了")
 
     elif hook_event == "Notification":
@@ -149,7 +179,7 @@ def process_hook_message(
             elif message.startswith("Claude wants to"):
                 return notifications.get("permission_needed", "許可が必要")
             elif message.startswith("Claude Code needs your attention"):
-                question = extract_last_assistant_message(transcript_path)
+                question, _ = extract_last_assistant_message(transcript_path)
                 return question or notifications.get("question", "質問がある")
             else:
                 return message or notifications.get("permission_needed", "許可が必要")
@@ -243,6 +273,11 @@ def main():
     voicevox_speaker_id = get_default_speaker_id(config)
     speed = DEFAULT_SPEED
     notifications = config.get("notifications", {})
+
+    # Extract speaker_id from transcript if available
+    _, transcript_speaker_id = extract_last_assistant_message(transcript_path)
+    if transcript_speaker_id is not None:
+        voicevox_speaker_id = transcript_speaker_id
 
     # Process message
     text = process_hook_message(hook_event, message, transcript_path, notifications)
