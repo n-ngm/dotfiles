@@ -1,6 +1,6 @@
 # VoiceBox - Claude Code VOICEVOX 連携
 
-Claude Code の hooks と MCP を使って、VOICEVOX による音声通知・音声読み上げを行うセットアップ。
+Claude Code のプラグインと MCP を使って、VOICEVOX による音声通知・音声読み上げを行うセットアップ。
 
 ## 前提条件
 
@@ -14,17 +14,21 @@ Claude Code の hooks と MCP を使って、VOICEVOX による音声通知・�
 
 ```
 .claude/scripts/voicebox/
-├── README.md
-├── AGENTS.md              # Claude Code 向けエージェントルール
-├── docker-compose.yml     # VOICEVOX Engine (CPU版)
-├── voicevox-notify.py     # 通知スクリプト (Python/uv)
-├── voicevox-notify.sh     # 通知スクリプト (Bash版、レガシー)
-└── speakers/
-    ├── current.yaml -> zundamon.yaml   # 現在のキャラクター (シンボリックリンク)
-    ├── zundamon.yaml
-    ├── shikoku_metan.yaml
-    ├── ankomon.yaml
-    └── ...
+├── .claude-plugin/
+│   └── plugin.json            # プラグインマニフェスト
+├── hooks/
+│   └── hooks.json             # hooks 定義
+├── speakers/
+│   ├── current.yaml -> kasukabe_tsumugi.yaml  # 現在のキャラクター (シンボリックリンク)
+│   ├── zundamon.yaml
+│   ├── shikoku_metan.yaml
+│   ├── ankomon.yaml
+│   └── ...
+├── AGENTS.md                  # Claude Code 向けエージェントルール
+├── voicevox-notify.py         # 通知スクリプト (Python/uv)
+├── docker-compose.yml         # VOICEVOX Engine (CPU版)
+├── .gitignore
+└── README.md
 ```
 
 ## セットアップ
@@ -38,38 +42,21 @@ docker compose up -d
 
 `http://localhost:50021` で VOICEVOX Engine が起動する。
 
-### 2. Claude Code の hooks 設定
+### 2. プラグインの有効化
 
-`.claude/settings.json` に以下を追加:
+`--plugin-dir` オプションで起動する:
 
-```json
-{
-  "hooks": {
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/voicebox/voicevox-notify.py"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/voicebox/voicevox-notify.py"
-          }
-        ]
-      }
-    ]
-  }
-}
+```bash
+claude --plugin-dir ~/.claude/scripts/voicebox
 ```
+
+alias を設定しておくと便利:
+
+```bash
+alias claude='claude --plugin-dir ~/.claude/scripts/voicebox'
+```
+
+hooks は `hooks/hooks.json` で定義されており、プラグイン読み込み時に自動で有効になる。
 
 - **Stop**: タスク完了時にデスクトップ通知 + 音声読み上げ
 - **Notification**: 権限確認・質問など、ユーザー入力待ち時に通知
@@ -85,7 +72,7 @@ Claude Code の MCP 設定に VOICEVOX MCP Server を追加すると、Claude �
 ```markdown
 ### Import
 
-VoiceBox: @scripts/voicebox/AGENTS.md
+VoiceBox: @~/.claude/scripts/voicebox/AGENTS.md
 ```
 
 これにより Claude Code がキャラクター口調や音声通知のルールに従うようになる。
@@ -147,13 +134,14 @@ notifications:
 ## 仕組み
 
 ```
-Claude Code (hooks: Stop/Notification)
+Claude Code (plugin: voicebox)
   │
-  ├── voicevox-notify.py (stdin で JSON を受け取る)
-  │     ├── speakers/current.yaml から口調・speaker_id を取得
-  │     ├── transcript から最後の応答テキストを抽出
-  │     ├── terminal-notifier でデスクトップ通知
-  │     └── VOICEVOX Engine (localhost:50021) で音声合成 → afplay で再生
+  ├── hooks/hooks.json → Stop/Notification フック定義
+  │     └── voicevox-notify.py (stdin で JSON を受け取る)
+  │           ├── speakers/current.yaml から口調・speaker_id を取得
+  │           ├── transcript から最後の応答テキストを抽出
+  │           ├── terminal-notifier でデスクトップ通知
+  │           └── VOICEVOX Engine (localhost:50021) で音声合成 → afplay で再生
   │
   └── VOICEVOX MCP Server (明示的に指示した場合のみ)
         └── Claude が直接テキスト読み上げを実行

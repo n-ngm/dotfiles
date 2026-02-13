@@ -6,6 +6,12 @@ source $HOME/.local/bin/env 2>/dev/null
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# alias
+if [ -e "$HOME/.alias" ]
+then
+    source "$HOME/.alias"
+fi
+
 # Claude Agent: skip heavy initialization
 if [[ -n "$CLAUDE_AGENT" ]]; then
   export PATH="$HOME/.bun/bin:$HOME/.local/bin:$HOME/.antigravity/antigravity/bin:$PATH"
@@ -44,12 +50,6 @@ zplug load
 export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=100000
-
-# alias
-if [ -e "$HOME/.alias" ]
-then
-    source "$HOME/.alias"
-fi
 
 # anyenv
 if [ -e "$HOME/.anyenv" ]
@@ -159,3 +159,4 @@ function precmd() {
 
 # Added by Antigravity
 export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+eval "$(mise activate zsh)"

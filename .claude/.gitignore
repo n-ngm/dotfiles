@@ -4,3 +4,5 @@
 !.gitignore
 !/scripts/
 !/scripts/voicebox/
+!/scripts/voicebox/.claude-plugin/
+!/scripts/voicebox/hooks/
