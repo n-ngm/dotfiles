@@ -1,6 +1,6 @@
 ### VOICEBOX 基本ルール
 
-- **テキスト応答は `~/.claude/settings.local.json` の `voicebox.speakers_dir` で指定されたディレクトリの `current.yaml` に設定されたキャラクターの口調で行うこと**
+- **テキスト応答は現在のキャラクターの口調で行うこと（キャラクター決定ルールは後述）**
 - **回答の最後の行に `(speaker_id: <番号>)` を追加すること（hooks通知で自動的に音声スタイルとして使用される）**
 - **VOICEVOX MCP はユーザーが明示的に指示した場合のみ使用すること**
 
@@ -11,10 +11,18 @@
 - 英単語は適切にカタカナに変換すること
 - 音声作成時は〜をーに変換すること
 
+### VOICEBOX キャラクター決定ルール
+
+- `voicebox.current_speaker` を以下の優先度で解決する（`settings.local.json` のみ参照）：
+  1. `{プロジェクトディレクトリ}/.claude/settings.local.json`
+  2. `~/.claude/settings.local.json`
+  3. デフォルト: `zundamon`
+- 設定例: `{ "voicebox": { "current_speaker": "zundamon" } }`
+- キャラクター変更を指示された場合、プロジェクト単位かグローバルかをユーザーに確認すること
+- speakers ディレクトリはプラグインの `speakers/` ディレクトリを使用する
+
 ### VOICEBOX キャラクター口調ルール
 
-- speakers ディレクトリは `~/.claude/settings.local.json` の `voicebox.speakers_dir` で設定される
-- `current.yaml` はシンボリックリンクで管理すること
 - キャラクターを指定された場合、speakers ディレクトリに `<speaker_name>.yaml` が存在するか確認すること
 - キャラクターの `speech_style` と `examples` を参照し、口調を一貫させること
 - 話す内容に合ったスタイルの `speaker_id` を選択すること（例: 喜び→喜びスタイル、エラー→悲しみスタイルなど）

@@ -19,7 +19,6 @@ voicebox/
 ├── commands/
 │   └── install.md             # /voicebox:install コマンド
 ├── speakers/
-│   ├── current.yaml           # 現在のキャラクター (シンボリックリンク)
 │   ├── zundamon.yaml
 │   ├── shikoku_metan.yaml
 │   ├── ankomon.yaml
@@ -27,7 +26,7 @@ voicebox/
 ├── .mcp.json                  # VOICEVOX MCP Server 設定
 ├── CLAUDE.md                  # Claude Code 向けキャラクター口調ルール
 ├── notify.py         # 通知スクリプト (Python/uv)
-├── setup.py                   # セットアップスクリプト (hooks/speakers_dir 設定)
+├── setup.py                   # セットアップスクリプト (hooks 設定)
 ├── docker-compose.yml         # VOICEVOX Engine (CPU版)
 └── README.md
 ```
@@ -46,7 +45,7 @@ claude --plugin-dir /path/to/voicebox
 
 1. 前提条件チェック (docker, terminal-notifier, uv)
 2. VOICEVOX Engine の起動 (Docker)
-3. hooks / speakers_dir の設定 (`~/.claude/settings.json`, `~/.claude/settings.local.json`)
+3. hooks の設定 (`~/.claude/settings.json`)
 4. `~/.claude/CLAUDE.md` への CLAUDE.md インポート設定
 
 ### 手動セットアップ
@@ -67,7 +66,6 @@ python3 /path/to/voicebox/setup.py
 
 以下が自動設定される:
 - `~/.claude/settings.json` に hooks (Stop/Notification) を追加
-- `~/.claude/settings.local.json` に `voicebox.speakers_dir` を設定
 
 パスは `setup.py` の配置場所から自動解決される。
 
@@ -89,26 +87,22 @@ VoiceBox: @/path/to/voicebox/CLAUDE.md
 
 ## キャラクター設定
 
-### speakers ディレクトリの設定
+### キャラクター切り替え
 
-speakers の参照先は `~/.claude/settings.local.json` で管理される (`setup.py` で自動設定):
+`settings.local.json` の `voicebox.current_speaker` で設定する:
 
 ```json
 {
   "voicebox": {
-    "speakers_dir": "/path/to/voicebox/speakers"
+    "current_speaker": "zundamon"
   }
 }
 ```
 
-### キャラクター切り替え
-
-`speakers/current.yaml` のシンボリックリンク先を変更する:
-
-```bash
-cd /path/to/voicebox/speakers
-ln -sf shikoku_metan.yaml current.yaml
-```
+**解決の優先度:**
+1. `{プロジェクトディレクトリ}/.claude/settings.local.json`
+2. `~/.claude/settings.local.json`
+3. デフォルト: `zundamon`
 
 ### キャラクター YAML の構造
 
@@ -158,11 +152,11 @@ notifications:
 ```
 Claude Code
   │
-  ├── setup.py → settings.json に hooks / speakers_dir を登録
+  ├── setup.py → settings.json に hooks を登録
   │
   ├── notify.py (hooks から呼ばれる、stdin で JSON を受け取る)
-  │     ├── settings.local.json → speakers_dir を解決
-  │     ├── speakers/current.yaml から口調・speaker_id を取得
+  │     ├── settings.local.json → current_speaker を解決
+  │     ├── speakers/{current_speaker}.yaml から口調・speaker_id を取得
   │     ├── transcript から最後の応答テキストを抽出
   │     ├── terminal-notifier でデスクトップ通知
   │     └── VOICEVOX Engine (localhost:50021) で音声合成 → afplay で再生

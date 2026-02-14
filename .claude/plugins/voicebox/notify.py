@@ -29,28 +29,53 @@ VOICEVOX_HOST = "http://localhost:50021"
 DEFAULT_SPEED = 1.3
 
 
-def resolve_speakers_dir() -> Path:
-    """Resolve speakers directory from settings.local.json or fallback to script-relative."""
-    local_settings = Path.home() / ".claude" / "settings.local.json"
-    if local_settings.exists():
-        try:
-            with open(local_settings, "r", encoding="utf-8") as f:
-                config = json.load(f)
-            speakers_dir = config.get("voicebox", {}).get("speakers_dir")
-            if speakers_dir:
-                p = Path(speakers_dir).expanduser()
-                if p.exists():
-                    return p
-        except (json.JSONDecodeError, KeyError):
-            pass
-    return Path(__file__).parent / "speakers"
+SPEAKERS_DIR = Path(__file__).parent / "speakers"
 
 
-def load_current_speaker_config() -> dict:
-    """Load current speaker configuration from speakers/current.yaml symlink."""
-    current_yaml = resolve_speakers_dir() / "current.yaml"
-    if current_yaml.exists():
-        with open(current_yaml, "r", encoding="utf-8") as f:
+def _read_settings_value(settings_path: Path, *keys: str):
+    """Read a nested value from a settings JSON file."""
+    if not settings_path.exists():
+        return None
+    try:
+        with open(settings_path, "r", encoding="utf-8") as f:
+            config = json.load(f)
+        value = config
+        for key in keys:
+            if not isinstance(value, dict):
+                return None
+            value = value.get(key)
+            if value is None:
+                return None
+        return value
+    except (json.JSONDecodeError, KeyError):
+        return None
+
+
+def resolve_current_speaker(cwd: str | None) -> str:
+    """Resolve current speaker name from settings.local.json files.
+
+    Priority:
+    1. {cwd}/.claude/settings.local.json
+    2. ~/.claude/settings.local.json
+    3. Default: "zundamon"
+    """
+    search_paths = []
+    if cwd:
+        search_paths.append(Path(cwd) / ".claude" / "settings.local.json")
+    search_paths.append(Path.home() / ".claude" / "settings.local.json")
+
+    for settings_path in search_paths:
+        speaker = _read_settings_value(settings_path, "voicebox", "current_speaker")
+        if speaker:
+            return speaker
+    return "zundamon"
+
+
+def load_current_speaker_config(speaker_name: str) -> dict:
+    """Load speaker configuration from speakers/{speaker_name}.yaml."""
+    speaker_yaml = SPEAKERS_DIR / f"{speaker_name}.yaml"
+    if speaker_yaml.exists():
+        with open(speaker_yaml, "r", encoding="utf-8") as f:
             config = yaml.safe_load(f)
             if config:
                 return config
@@ -150,15 +175,20 @@ def extract_last_assistant_message(transcript_path: str) -> tuple[str | None, in
                 data = json.loads(line)
                 if data.get("type") == "assistant":
                     content = data.get("message", {}).get("content", [])
-                    if content and content[0].get("type") == "text":
-                        full_text = content[0].get("text", "")
-                        # Extract speaker_id from last line
-                        speaker_id = extract_speaker_id_from_text(full_text)
-                        # Remove speaker_id line before extracting message
-                        clean_text = remove_speaker_id_line(full_text)
-                        # Get first line only
-                        first_line = clean_text.split("\n")[0]
-                        return first_line, speaker_id
+                    # Find text block in content (may not be first element)
+                    for block in content:
+                        if block.get("type") == "text":
+                            full_text = block.get("text", "").strip()
+                            if not full_text:
+                                continue
+                            # Extract speaker_id from last line
+                            speaker_id = extract_speaker_id_from_text(full_text)
+                            # Remove speaker_id line before extracting message
+                            clean_text = remove_speaker_id_line(full_text)
+                            # Get first line only
+                            first_line = clean_text.split("\n")[0]
+                            if first_line:
+                                return first_line, speaker_id
             except json.JSONDecodeError:
                 continue
     except Exception:
@@ -287,9 +317,11 @@ def main():
     hook_event = input_data.get("hook_event_name", "")
     message = input_data.get("message")
     transcript_path = input_data.get("transcript_path")
+    cwd = input_data.get("cwd")
 
     # Load speaker config
-    config = load_current_speaker_config()
+    speaker_name = resolve_current_speaker(cwd)
+    config = load_current_speaker_config(speaker_name)
     voicevox_speaker_id = get_default_speaker_id(config)
     speed = DEFAULT_SPEED
     notifications = config.get("notifications", {})
