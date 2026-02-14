@@ -48,7 +48,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/plugins/voicebox/voicevox-notify.py"
+            "command": "~/.claude/plugins/voicebox/notify.py"
           }
         ]
       }
@@ -59,7 +59,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/plugins/voicebox/voicevox-notify.py"
+            "command": "~/.claude/plugins/voicebox/notify.py"
           }
         ]
       }

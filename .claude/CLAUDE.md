@@ -1,6 +1,6 @@
 ### Import
 
-VoiceBox: @~/.claude/plugins/voicebox/AGENTS.md
+VoiceBox: @~/.claude/plugins/voicebox/CLAUDE.md
 
 ### git commit ルール
 
