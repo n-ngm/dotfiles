@@ -25,17 +25,32 @@ from pathlib import Path
 import requests
 import yaml
 
-SCRIPT_DIR = Path(__file__).parent
-SPEAKERS_DIR = SCRIPT_DIR / "speakers"
-CURRENT_SPEAKER_YAML = SPEAKERS_DIR / "current.yaml"
 VOICEVOX_HOST = "http://localhost:50021"
 DEFAULT_SPEED = 1.3
 
 
+def resolve_speakers_dir() -> Path:
+    """Resolve speakers directory from settings.local.json or fallback to script-relative."""
+    local_settings = Path.home() / ".claude" / "settings.local.json"
+    if local_settings.exists():
+        try:
+            with open(local_settings, "r", encoding="utf-8") as f:
+                config = json.load(f)
+            speakers_dir = config.get("voicebox", {}).get("speakers_dir")
+            if speakers_dir:
+                p = Path(speakers_dir).expanduser()
+                if p.exists():
+                    return p
+        except (json.JSONDecodeError, KeyError):
+            pass
+    return Path(__file__).parent / "speakers"
+
+
 def load_current_speaker_config() -> dict:
     """Load current speaker configuration from speakers/current.yaml symlink."""
-    if CURRENT_SPEAKER_YAML.exists():
-        with open(CURRENT_SPEAKER_YAML, "r", encoding="utf-8") as f:
+    current_yaml = resolve_speakers_dir() / "current.yaml"
+    if current_yaml.exists():
+        with open(current_yaml, "r", encoding="utf-8") as f:
             config = yaml.safe_load(f)
             if config:
                 return config

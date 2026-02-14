@@ -7,7 +7,7 @@
       "Bash",
       "WebFetch(domain:*.github.com)",
       "mcp__voicevox__speak",
-      "Read(~/.claude/scripts/voicebox/*)",
+      "Read(~/.claude/plugins/voicebox/*)",
       "mcp__github__get_*",
       "mcp__github__list_*",
       "mcp__github__search_*",
@@ -48,7 +48,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/scripts/voicebox/voicevox-notify.py"
+            "command": "~/.claude/plugins/voicebox/voicevox-notify.py"
           }
         ]
       }
@@ -59,7 +59,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/scripts/voicebox/voicevox-notify.py"
+            "command": "~/.claude/plugins/voicebox/voicevox-notify.py"
           }
         ]
       }

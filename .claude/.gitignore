@@ -2,7 +2,7 @@
 !CLAUDE.md
 !settings.json
 !.gitignore
-!/scripts/
-!/scripts/voicebox/
-!/scripts/voicebox/.claude-plugin/
-!/scripts/voicebox/hooks/
+!/plugins/
+!/plugins/voicebox/
+!/plugins/voicebox/.claude-plugin/
+!/plugins/voicebox/hooks/

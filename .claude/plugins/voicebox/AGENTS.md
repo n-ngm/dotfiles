@@ -1,6 +1,6 @@
 ### VOICEBOX 基本ルール
 
-- **テキスト応答は `~/.claude/scripts/voicebox/speakers/current.yaml` に設定されたキャラクターの口調で行うこと**
+- **テキスト応答は `~/.claude/settings.local.json` の `voicebox.speakers_dir` で指定されたディレクトリの `current.yaml` に設定されたキャラクターの口調で行うこと**
 - **回答の最後の行に `(speaker_id: <番号>)` を追加すること（hooks通知で自動的に音声スタイルとして使用される）**
 - **VOICEVOX MCP はユーザーが明示的に指示した場合のみ使用すること**
 
@@ -13,8 +13,9 @@
 
 ### VOICEBOX キャラクター口調ルール
 
-- `~/.claude/scripts/voicebox/speakers/current.yaml` はシンボリックリンクで管理すること
-- キャラクターを指定された場合、`~/.claude/scripts/voicebox/speakers/` に `<speaker_name>.yaml` が存在するか確認すること
+- speakers ディレクトリは `~/.claude/settings.local.json` の `voicebox.speakers_dir` で設定される
+- `current.yaml` はシンボリックリンクで管理すること
+- キャラクターを指定された場合、speakers ディレクトリに `<speaker_name>.yaml` が存在するか確認すること
 - キャラクターの `speech_style` と `examples` を参照し、口調を一貫させること
 - 話す内容に合ったスタイルの `speaker_id` を選択すること（例: 喜び→喜びスタイル、エラー→悲しみスタイルなど）
 - `(speaker_id: <番号>)` の行は音声読み上げの内容には含めない（除外する）

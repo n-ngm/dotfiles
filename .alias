@@ -34,7 +34,6 @@ alias dcrst='docker compose restart'
 alias dcsd='docker stop $(docker ps -q)'
 
 # Claude and Ollama
-alias claude='claude --plugin-dir ~/.claude/scripts/voicebox'
 alias claude-ollama='ANTHROPIC_AUTH_TOKEN=ollama ANTHROPIC_BASE_URL=http://localhost:11434 claude --model=qwen3:8b-for-claude'
 #alias claude-ollama="HOME=$HOME/tools/ollama claude"
 
