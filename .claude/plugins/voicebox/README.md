@@ -13,72 +13,90 @@ Claude Code のプラグインと MCP を使って、VOICEVOX による音声通
 ## ディレクトリ構成
 
 ```
-.claude/plugins/voicebox/
+voicebox/
 ├── .claude-plugin/
 │   └── plugin.json            # プラグインマニフェスト
-├── hooks/
-│   └── hooks.json             # hooks 定義
+├── commands/
+│   └── install.md             # /voicebox:install コマンド
 ├── speakers/
-│   ├── current.yaml -> kasukabe_tsumugi.yaml  # 現在のキャラクター (シンボリックリンク)
+│   ├── current.yaml           # 現在のキャラクター (シンボリックリンク)
 │   ├── zundamon.yaml
 │   ├── shikoku_metan.yaml
 │   ├── ankomon.yaml
 │   └── ...
-├── AGENTS.md                  # Claude Code 向けエージェントルール
-├── voicevox-notify.py         # 通知スクリプト (Python/uv)
-├── setup.py                   # セットアップスクリプト
+├── .mcp.json                  # VOICEVOX MCP Server 設定
+├── CLAUDE.md                  # Claude Code 向けキャラクター口調ルール
+├── notify.py         # 通知スクリプト (Python/uv)
+├── setup.py                   # セットアップスクリプト (hooks/speakers_dir 設定)
 ├── docker-compose.yml         # VOICEVOX Engine (CPU版)
-├── .gitignore
 └── README.md
 ```
 
 ## セットアップ
 
-### 1. VOICEVOX Engine の起動
+### インストールコマンド (推奨)
+
+プラグインとして読み込み、インストールコマンドを実行する:
 
 ```bash
-cd ~/.claude/plugins/voicebox
-docker compose up -d
+claude --plugin-dir /path/to/voicebox
+```
+
+セッション内で `/voicebox:install` を実行すると、以下が順番に行われる:
+
+1. 前提条件チェック (docker, terminal-notifier, uv)
+2. VOICEVOX Engine の起動 (Docker)
+3. hooks / speakers_dir の設定 (`~/.claude/settings.json`, `~/.claude/settings.local.json`)
+4. `~/.claude/CLAUDE.md` への CLAUDE.md インポート設定
+
+### 手動セットアップ
+
+#### 1. VOICEVOX Engine の起動
+
+```bash
+docker compose -f /path/to/voicebox/docker-compose.yml up -d
 ```
 
 `http://localhost:50021` で VOICEVOX Engine が起動する。
 
-### 2. セットアップスクリプトの実行
+#### 2. セットアップスクリプトの実行
 
 ```bash
-python3 ~/.claude/plugins/voicebox/setup.py
+python3 /path/to/voicebox/setup.py
 ```
 
 以下が自動設定される:
 - `~/.claude/settings.json` に hooks (Stop/Notification) を追加
 - `~/.claude/settings.local.json` に `voicebox.speakers_dir` を設定
 
-### 3. VOICEVOX MCP Server の設定
+パスは `setup.py` の配置場所から自動解決される。
 
-Claude Code の MCP 設定に VOICEVOX MCP Server を追加すると、Claude が直接音声合成を呼び出せるようになる。
+#### 3. CLAUDE.md のインポート
 
-### 4. AGENTS.md の読み込み
-
-`.claude/CLAUDE.md` に以下を追加:
+`~/.claude/CLAUDE.md` に以下を追加:
 
 ```markdown
 ### Import
 
-VoiceBox: @~/.claude/plugins/voicebox/AGENTS.md
+VoiceBox: @/path/to/voicebox/CLAUDE.md
 ```
 
 これにより Claude Code がキャラクター口調や音声通知のルールに従うようになる。
+
+#### 4. VOICEVOX MCP Server の設定
+
+プラグインの `.mcp.json` で自動設定される。手動で設定する場合は Claude Code の MCP 設定に VOICEVOX MCP Server を追加する。
 
 ## キャラクター設定
 
 ### speakers ディレクトリの設定
 
-speakers の参照先は `~/.claude/settings.local.json` で管理される:
+speakers の参照先は `~/.claude/settings.local.json` で管理される (`setup.py` で自動設定):
 
 ```json
 {
   "voicebox": {
-    "speakers_dir": "~/.claude/plugins/voicebox/speakers"
+    "speakers_dir": "/path/to/voicebox/speakers"
   }
 }
 ```
@@ -88,7 +106,7 @@ speakers の参照先は `~/.claude/settings.local.json` で管理される:
 `speakers/current.yaml` のシンボリックリンク先を変更する:
 
 ```bash
-cd ~/.claude/plugins/voicebox/speakers
+cd /path/to/voicebox/speakers
 ln -sf shikoku_metan.yaml current.yaml
 ```
 
@@ -138,15 +156,18 @@ notifications:
 ## 仕組み
 
 ```
-Claude Code (plugin: voicebox)
+Claude Code
   │
-  ├── hooks/hooks.json → Stop/Notification フック定義
-  │     └── voicevox-notify.py (stdin で JSON を受け取る)
-  │           ├── settings.local.json → speakers_dir を解決
-  │           ├── speakers/current.yaml から口調・speaker_id を取得
-  │           ├── transcript から最後の応答テキストを抽出
-  │           ├── terminal-notifier でデスクトップ通知
-  │           └── VOICEVOX Engine (localhost:50021) で音声合成 → afplay で再生
+  ├── setup.py → settings.json に hooks / speakers_dir を登録
+  │
+  ├── notify.py (hooks から呼ばれる、stdin で JSON を受け取る)
+  │     ├── settings.local.json → speakers_dir を解決
+  │     ├── speakers/current.yaml から口調・speaker_id を取得
+  │     ├── transcript から最後の応答テキストを抽出
+  │     ├── terminal-notifier でデスクトップ通知
+  │     └── VOICEVOX Engine (localhost:50021) で音声合成 → afplay で再生
+  │
+  ├── CLAUDE.md → キャラクター口調・speaker_id ルール
   │
   └── VOICEVOX MCP Server (明示的に指示した場合のみ)
         └── Claude が直接テキスト読み上げを実行
@@ -161,8 +182,7 @@ Claude Code (plugin: voicebox)
 curl http://localhost:50021/version
 
 # 再起動
-cd ~/.claude/plugins/voicebox
-docker compose restart
+docker compose -f /path/to/voicebox/docker-compose.yml restart
 ```
 
 ### 音声が遅い・MCP が応答しない

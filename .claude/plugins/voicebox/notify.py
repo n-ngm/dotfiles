@@ -5,7 +5,7 @@
 # ///
 """
 VOICEVOX notification script (Desktop notification + Voice synthesis)
-Usage: echo '{"hook_event_name":"Stop",...}' | voicevox-notify.py
+Usage: echo '{"hook_event_name":"Stop",...}' | notify.py
 Dependencies: uv, terminal-notifier, afplay
 
 Supported hooks:

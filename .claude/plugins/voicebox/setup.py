@@ -6,8 +6,9 @@ from pathlib import Path
 
 SETTINGS_PATH = Path.home() / ".claude" / "settings.json"
 LOCAL_SETTINGS_PATH = Path.home() / ".claude" / "settings.local.json"
-NOTIFY_COMMAND = "~/.claude/plugins/voicebox/voicevox-notify.py"
-DEFAULT_SPEAKERS_DIR = "~/.claude/plugins/voicebox/speakers"
+VOICEBOX_DIR = Path(__file__).resolve().parent
+NOTIFY_COMMAND = str(VOICEBOX_DIR / "notify.py")
+DEFAULT_SPEAKERS_DIR = str(VOICEBOX_DIR / "speakers")
 
 HOOKS = {
     "Notification": [
