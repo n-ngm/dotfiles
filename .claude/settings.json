@@ -41,5 +41,29 @@
       "mcp__github__update_*"
     ]
   },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/voicebox/voicevox-notify.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/voicebox/voicevox-notify.py"
+          }
+        ]
+      }
+    ]
+  },
   "enabledPlugins": {}
 }

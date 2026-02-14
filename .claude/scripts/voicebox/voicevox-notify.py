@@ -264,6 +264,11 @@ def main():
     except json.JSONDecodeError:
         input_data = {}
 
+    # Debug log
+    debug_log = Path("/tmp/voicebox-debug.log")
+    with open(debug_log, "a", encoding="utf-8") as f:
+        f.write(json.dumps(input_data, ensure_ascii=False, default=str) + "\n")
+
     hook_event = input_data.get("hook_event_name", "")
     message = input_data.get("message")
     transcript_path = input_data.get("transcript_path")
