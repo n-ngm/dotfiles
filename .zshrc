@@ -1,3 +1,7 @@
+# Ctrl+D でシェルが閉じないようにする
+setopt IGNORE_EOF
+bindkey -r '^D'
+
 # envs
 export LANG=ja_JP.UTF-8
 source "${HOME}/.env"
