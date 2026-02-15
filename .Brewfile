@@ -18,7 +18,7 @@ tap "universal-ctags/universal-ctags"
 # Shell & Terminal
 # ============================================
 brew "zsh-completions"
-brew "zplug"
+brew "sheldon"
 brew "tmux"
 brew "zellij"
 

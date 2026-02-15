@@ -1,0 +1,17 @@
+shell = "zsh"
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+apply = ["fpath"]
+
+[plugins.compinit]
+inline = "autoload -Uz compinit && compinit"
+
+[plugins.zsh-syntax-highlighting]
+github = "zsh-users/zsh-syntax-highlighting"
+
+[templates]
+fpath = 'fpath=( "{{ dir }}/src" $fpath )'
