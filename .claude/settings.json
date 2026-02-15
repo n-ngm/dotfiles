@@ -7,11 +7,11 @@
       "Bash",
       "WebFetch(domain:*.github.com)",
       "mcp__voicevox__speak",
-      "Read(~/.claude/plugins/voicebox/*)",
       "mcp__github__get_*",
       "mcp__github__list_*",
       "mcp__github__search_*",
-      "mcp__github__pull_request_read"
+      "mcp__github__pull_request_read",
+      "Read(**/.claude/settings.local.json)"
     ],
     "deny": [
       "Bash(sudo:*)",
@@ -39,30 +39,6 @@
       "mcp__github__reprioritize_*",
       "mcp__github__request_*",
       "mcp__github__update_*"
-    ]
-  },
-  "hooks": {
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/plugins/voicebox/notify.py"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/plugins/voicebox/notify.py"
-          }
-        ]
-      }
     ]
   },
   "enabledPlugins": {}
