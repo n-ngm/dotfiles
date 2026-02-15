@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "voicevox": {
+    "mcp-server-voicevox": {
       "command": "uvx",
       "args": ["mcp-server-voicevox", "--voicevox-url=http://localhost:50021"]
     }
