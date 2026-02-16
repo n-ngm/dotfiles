@@ -67,7 +67,7 @@ docker compose -f /path/to/voicebox/docker-compose.yml up -d
 
 ### キャラクター切り替え
 
-`settings.local.json` の `voicebox.current_speaker` で設定する:
+`settings.voicebox.json` の `voicebox.current_speaker` で設定する:
 
 ```json
 {
@@ -78,8 +78,8 @@ docker compose -f /path/to/voicebox/docker-compose.yml up -d
 ```
 
 **解決の優先度:**
-1. `{プロジェクトディレクトリ}/.claude/settings.local.json`
-2. `~/.claude/settings.local.json`
+1. `{プロジェクトディレクトリ}/.claude/settings.voicebox.json`
+2. `~/.claude/settings.voicebox.json`
 3. デフォルト: `zundamon`
 
 ### キャラクター YAML の構造
@@ -133,7 +133,7 @@ Claude Code
   ├── setup.py → settings.json に hooks を登録
   │
   ├── notify.py (hooks から呼ばれる、stdin で JSON を受け取る)
-  │     ├── settings.local.json → current_speaker を解決
+  │     ├── settings.voicebox.json → current_speaker を解決
   │     ├── speakers/{current_speaker}.yaml から口調・speaker_id を取得
   │     ├── transcript から最後の応答テキストを抽出
   │     ├── デスクトップ通知 (macOS: terminal-notifier / Linux: notify-send)

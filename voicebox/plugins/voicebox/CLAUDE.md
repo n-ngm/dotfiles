@@ -14,9 +14,9 @@
 
 ### VOICEBOX キャラクター決定ルール
 
-- `voicebox.current_speaker` を以下の優先度で解決する（`settings.local.json` のみ参照）：
-  1. `{プロジェクトディレクトリ}/.claude/settings.local.json`
-  2. `~/.claude/settings.local.json`
+- `voicebox.current_speaker` を以下の優先度で解決する（`settings.voicebox.json` のみ参照）：
+  1. `{プロジェクトディレクトリ}/.claude/settings.voicebox.json`
+  2. `~/.claude/settings.voicebox.json`
   3. デフォルト: `zundamon`
 - 設定例: `{ "voicebox": { "current_speaker": "zundamon" } }`
 - キャラクター変更を指示された場合、プロジェクト単位かグローバルかをユーザーに確認すること

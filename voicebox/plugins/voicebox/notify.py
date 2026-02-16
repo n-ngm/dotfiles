@@ -57,17 +57,17 @@ def _read_settings_value(settings_path: Path, *keys: str):
 
 
 def resolve_current_speaker(cwd: str | None) -> str:
-    """Resolve current speaker name from settings.local.json files.
+    """Resolve current speaker name from settings.voicebox.json files.
 
     Priority:
-    1. {cwd}/.claude/settings.local.json
-    2. ~/.claude/settings.local.json
+    1. {cwd}/.claude/settings.voicebox.json
+    2. ~/.claude/settings.voicebox.json
     3. Default: "zundamon"
     """
     search_paths = []
     if cwd:
-        search_paths.append(Path(cwd) / ".claude" / "settings.local.json")
-    search_paths.append(Path.home() / ".claude" / "settings.local.json")
+        search_paths.append(Path(cwd) / ".claude" / "settings.voicebox.json")
+    search_paths.append(Path.home() / ".claude" / "settings.voicebox.json")
 
     for settings_path in search_paths:
         speaker = _read_settings_value(settings_path, "voicebox", "current_speaker")

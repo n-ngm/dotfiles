@@ -21,11 +21,11 @@ docker compose -f <voicebox_dir>/docker-compose.yml up -d
 
 ## 3. デフォルトキャラクターの選択
 
-`~/.claude/settings.local.json` に `voicebox.current_speaker` を設定する。
+`~/.claude/settings.voicebox.json` に `voicebox.current_speaker` を設定する。
 
 既に設定済みならスキップする。未設定の場合、プラグインの `speakers/` ディレクトリから `.yaml` ファイルの一覧を取得し、各ファイルの `name` フィールドも読み取る。人気のキャラクター4人を選択肢として AskUserQuestion で提示する。質問文に「他のキャラクターも選べます」と記載し、ユーザーが「Other」から入力できるようにすること。
 
-選択されたキャラクターを `~/.claude/settings.local.json` に設定する:
+選択されたキャラクターを `~/.claude/settings.voicebox.json` に設定する:
 
 ```json
 {
@@ -37,11 +37,12 @@ docker compose -f <voicebox_dir>/docker-compose.yml up -d
 
 ## 4. permissions の設定
 
-`~/.claude/settings.json` の `permissions.allow` に `settings.local.json` の読み取り許可が未設定の場合、ユーザーに追加してよいか確認する。
+`~/.claude/settings.json` の `permissions.allow` に `settings.voicebox.json` の読み取り許可が未設定の場合、ユーザーに追加してよいか確認する。
 
 追加する内容:
 ```
-Read(**/.claude/settings.local.json)
+Read(~/.claude/settings.voicebox.json)
+Read(**/.claude/settings.voicebox.json)
 ```
 
 承諾されたら `permissions.allow` 配列に追記する。既に設定済みならスキップする。
