@@ -34,20 +34,20 @@ voicebox/
 
 ## セットアップ
 
-### インストールコマンド (推奨)
-
-プラグインとして読み込み、インストールコマンドを実行する:
+### marketplace からインストール（推奨）
 
 ```bash
-claude --plugin-dir /path/to/voicebox
+claude marketplace add /path/to/dotfiles/voicebox
 ```
 
-セッション内で `/voicebox:install` を実行すると、以下が順番に行われる:
+セッション内で `/plugin install voicebox@voicebox` を実行。
+
+その後 `/voicebox:install` を実行すると、以下が順番に行われる:
 
 1. 前提条件チェック (docker, terminal-notifier, uv)
 2. VOICEVOX Engine の起動 (Docker)
-3. hooks の設定 (`~/.claude/settings.json`)
-4. `~/.claude/CLAUDE.md` への CLAUDE.md インポート設定
+3. デフォルトキャラクターの選択
+4. permissions の設定
 
 ### 手動セットアップ
 
@@ -59,30 +59,7 @@ docker compose -f /path/to/voicebox/docker-compose.yml up -d
 
 `http://localhost:50021` で VOICEVOX Engine が起動する。
 
-#### 2. セットアップスクリプトの実行
-
-```bash
-python3 /path/to/voicebox/setup.py
-```
-
-以下が自動設定される:
-- `~/.claude/settings.json` に hooks (Stop/Notification) を追加
-
-パスは `setup.py` の配置場所から自動解決される。
-
-#### 3. CLAUDE.md のインポート
-
-`~/.claude/CLAUDE.md` に以下を追加:
-
-```markdown
-### Import
-
-VoiceBox: @/path/to/voicebox/CLAUDE.md
-```
-
-これにより Claude Code がキャラクター口調や音声通知のルールに従うようになる。
-
-#### 4. VOICEVOX MCP Server の設定
+#### 2. VOICEVOX MCP Server の設定
 
 プラグインの `.mcp.json` で自動設定される。手動で設定する場合は Claude Code の MCP 設定に VOICEVOX MCP Server を追加する。
 

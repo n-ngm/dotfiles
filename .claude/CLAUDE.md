@@ -1,7 +1,3 @@
-### Import
-
-VoiceBox: @~/.claude/plugins/voicebox/CLAUDE.md
-
 ### git commit ルール
 
 - 内容が複数ある場合は、コミットを分けることを推奨
