@@ -1,6 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR=$(cd $(dirname $0);pwd)
+OS="$(uname -s)"
 
 cd $HOME
 ln -snf $SCRIPT_DIR/.gitconfig .gitconfig
@@ -10,6 +11,11 @@ ln -snf $SCRIPT_DIR/.zshrc     .zshrc
 ln -snf $SCRIPT_DIR/.alias     .alias
 ln -snf $SCRIPT_DIR/.Brewfile  .Brewfile
 ln -snf $SCRIPT_DIR/.claude    .claude
+
+# macOS only
+if [ "$OS" = "Darwin" ]; then
+  ln -snf $SCRIPT_DIR/.zprofile  .zprofile
+fi
 
 cd $HOME
 mkdir -p .config/sheldon
