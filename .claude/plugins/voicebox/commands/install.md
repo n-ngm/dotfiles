@@ -5,8 +5,9 @@ VoiceBox Plugin のインストールを行う。以下の手順を順番に実�
 以下のコマンドが利用可能か確認する。不足があればユーザーに通知して中断する。
 
 - `docker` (Docker)
-- `terminal-notifier` (`brew install terminal-notifier`)
 - `uv` (Python スクリプト実行用)
+- macOS: `terminal-notifier` (`brew install terminal-notifier`)
+- Linux: `notify-send` (通知用、`sudo apt install libnotify-bin` 等), 音声再生用に `paplay`/`aplay`/`mpv` のいずれか
 
 ## 2. VOICEVOX Engine の起動
 

@@ -4,11 +4,12 @@ Claude Code のプラグインと MCP を使って、VOICEVOX による音声通
 
 ## 前提条件
 
-- macOS
+- macOS or Linux
 - [Docker](https://www.docker.com/)
-- [terminal-notifier](https://github.com/julienXX/terminal-notifier) (`brew install terminal-notifier`)
 - [uv](https://github.com/astral-sh/uv) (Python スクリプト実行用)
 - [VOICEVOX MCP Server](https://github.com/trasta298/mcp-server-voicevox) (Claude Code の MCP 設定に追加)
+- macOS: [terminal-notifier](https://github.com/julienXX/terminal-notifier) (`brew install terminal-notifier`)
+- Linux: `notify-send` (通知用), `paplay`/`aplay`/`mpv` (音声再生用、いずれか1つ)
 
 ## ディレクトリ構成
 
@@ -158,8 +159,8 @@ Claude Code
   │     ├── settings.local.json → current_speaker を解決
   │     ├── speakers/{current_speaker}.yaml から口調・speaker_id を取得
   │     ├── transcript から最後の応答テキストを抽出
-  │     ├── terminal-notifier でデスクトップ通知
-  │     └── VOICEVOX Engine (localhost:50021) で音声合成 → afplay で再生
+  │     ├── デスクトップ通知 (macOS: terminal-notifier / Linux: notify-send)
+  │     └── VOICEVOX Engine (localhost:50021) で音声合成 → 再生 (macOS: afplay / Linux: paplay/aplay/mpv)
   │
   ├── CLAUDE.md → キャラクター口調・speaker_id ルール
   │

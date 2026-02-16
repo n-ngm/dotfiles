@@ -6,7 +6,10 @@
 """
 VOICEVOX notification script (Desktop notification + Voice synthesis)
 Usage: echo '{"hook_event_name":"Stop",...}' | notify.py
-Dependencies: uv, terminal-notifier, afplay
+Dependencies:
+  - Common: uv
+  - macOS: terminal-notifier, afplay
+  - Linux: notify-send, paplay/aplay/mpv
 
 Supported hooks:
   - Stop: Task completion notification
@@ -15,7 +18,9 @@ Supported hooks:
 
 import json
 import os
+import platform
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -125,8 +130,8 @@ def extract_session_title(transcript_path: str) -> str:
 
         # Fallback: extract project name from path
         parent_dir = os.path.basename(os.path.dirname(transcript_path))
-        if parent_dir.startswith("-Users-"):
-            # e.g., -Users-myproject -> myproject
+        if parent_dir.startswith("-Users-") or parent_dir.startswith("-home-"):
+            # e.g., -Users-myproject or -home-user-myproject -> myproject
             parts = parent_dir.split("-")[2:]
             if parts:
                 return "/".join(parts)
@@ -282,7 +287,13 @@ def synthesize_and_play(text: str, speaker_id: int, speed: float) -> None:
             f.write(response.content)
 
         # Play audio
-        subprocess.run(["afplay", tmpfile], check=False)
+        if platform.system() == "Darwin":
+            subprocess.run(["afplay", tmpfile], check=False)
+        else:
+            for player in [["paplay", tmpfile], ["aplay", tmpfile], ["mpv", "--no-video", tmpfile]]:
+                if shutil.which(player[0]):
+                    subprocess.run(player, check=False)
+                    break
 
     except requests.exceptions.ConnectionError:
         print("Error: Cannot connect to VOICEVOX", file=sys.stderr)
@@ -295,11 +306,15 @@ def synthesize_and_play(text: str, speaker_id: int, speed: float) -> None:
 
 
 def show_notification(title: str, message: str) -> None:
-    """Show desktop notification using terminal-notifier."""
-    subprocess.run(
-        ["terminal-notifier", "-title", title, "-message", message, "-ignoreDnD"],
-        check=False,
-    )
+    """Show desktop notification."""
+    if platform.system() == "Darwin":
+        subprocess.run(
+            ["terminal-notifier", "-title", title, "-message", message, "-ignoreDnD"],
+            check=False,
+        )
+    else:
+        if shutil.which("notify-send"):
+            subprocess.run(["notify-send", title, message], check=False)
 
 
 def main():
