@@ -188,7 +188,7 @@ let g:vdebug_options= {
 \    "debug_file_level" : 2,
 \    "debug_file" : "/tmp/xdebug.log",
 \    "path_maps" : {
-\       '/app' : '/Users/'.$USER.'/Projects/HotStartup/peraichi',
+\       '/app' : $HOME.'/Projects/HotStartup/peraichi',
 \    },
 \    "window_arrangement" : ["DebuggerWatch", "DebuggerStack"]
 \}
