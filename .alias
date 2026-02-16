@@ -11,9 +11,16 @@ alias s='git status'
 
 # General useful aliases
 alias reload='exec $SHELL -l'
-alias ls="LC_COLLATE=C $(brew --prefix)/bin/gls --group-directories-first --color=auto" # needs GNU ls -> brew install coreutils
-alias sed='gsed' # needs GNU sed -> brew install gnu-sed
-alias grep='ggrep --color=auto' # needs GNU grep -> brew install grep
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  # macOS: Homebrew GNU utilities
+  alias ls="LC_COLLATE=C $(brew --prefix)/bin/gls --group-directories-first --color=auto"
+  alias sed='gsed'
+  alias grep='ggrep --color=auto'
+else
+  # Linux: GNU tools are native
+  alias ls='LC_COLLATE=C ls --group-directories-first --color=auto'
+  alias grep='grep --color=auto'
+fi
 alias strip-comment="sed -e 's|//.*||' -e 's|/\*.*\*/||g'"
 alias terminalizer='npx terminalizer'
 
