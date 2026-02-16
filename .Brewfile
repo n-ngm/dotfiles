@@ -81,7 +81,9 @@ brew "sqlite-utils"
 # ============================================
 # Container & Virtualization
 # ============================================
-brew "colima", restart_service: :changed
+if OS.mac?
+  brew "colima", restart_service: :changed
+end
 brew "docker"
 brew "docker-buildx"
 brew "docker-compose"
@@ -181,28 +183,30 @@ brew "cabextract"
 brew "cdrtools"
 brew "wimlib"
 brew "dnsmasq"
-brew "terminal-notifier"
+if OS.mac?
+  brew "terminal-notifier"
 
-# ============================================
-# Casks - CLI Tools
-# ============================================
-cask "1password-cli"
-cask "gcloud-cli"
+  # ============================================
+  # Casks - CLI Tools
+  # ============================================
+  cask "1password-cli"
+  cask "gcloud-cli"
 
-# ============================================
-# Casks - Development Tools
-# ============================================
-cask "alacritty"
-cask "claude-code"
-cask "mitmproxy"
+  # ============================================
+  # Casks - Development Tools
+  # ============================================
+  cask "alacritty"
+  cask "claude-code"
+  cask "mitmproxy"
 
-# ============================================
-# Casks - Python Environments
-# ============================================
-cask "anaconda"
-cask "miniconda"
+  # ============================================
+  # Casks - Python Environments
+  # ============================================
+  cask "anaconda"
+  cask "miniconda"
 
-# ============================================
-# Casks - Utilities
-# ============================================
-cask "notunes"
+  # ============================================
+  # Casks - Utilities
+  # ============================================
+  cask "notunes"
+end
