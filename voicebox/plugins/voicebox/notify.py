@@ -116,25 +116,26 @@ def extract_session_title(transcript_path: str) -> str:
         return title
 
     try:
-        # Read last 20 lines to find slug
         with open(transcript_path, "r", encoding="utf-8") as f:
-            lines = f.readlines()[-20:]
+            lines = f.readlines()
 
+        # Search for summary (AI-generated session title) from end
         for line in reversed(lines):
             try:
                 data = json.loads(line)
-                if slug := data.get("slug"):
-                    return slug
+                if data.get("type") == "summary":
+                    if summary := data.get("summary"):
+                        return summary
             except json.JSONDecodeError:
                 continue
 
         # Fallback: extract project name from path
         parent_dir = os.path.basename(os.path.dirname(transcript_path))
         if parent_dir.startswith("-Users-") or parent_dir.startswith("-home-"):
-            # e.g., -Users-myproject or -home-user-myproject -> myproject
-            parts = parent_dir.split("-")[2:]
+            # e.g., -home-developer-dotfiles -> dotfiles
+            parts = parent_dir.split("-")
             if parts:
-                return "/".join(parts)
+                return parts[-1]
     except Exception:
         pass
 
