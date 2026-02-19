@@ -1,16 +1,45 @@
 # One character shortcuts
-alias a='git add'
-alias b='git branch --sort=committerdate'
-alias c='git checkout'
-alias d='git diff'
+alias c='claude'
 alias e='vim'
-alias f='find . '
+alias f='fd . '
 alias g='git'
 alias l='ls -la '
-alias s='git status'
 
 # General useful aliases
 alias reload='exec $SHELL -l'
+
+# git aliases
+alias ga='git add'
+alias gc='git checkout'
+alias gd='git diff'
+alias gb='git branch --sort=committerdate'
+alias gs='git status'
+alias gpc='gh pr create -w '
+
+# Claude and Ollama
+alias cr='claude --resume'
+alias claude-ollama='ANTHROPIC_AUTH_TOKEN=ollama ANTHROPIC_BASE_URL=http://localhost:11434 claude --model=qwen3:8b-for-claude'
+alias claude-tmux='tmux new-session; source-file ~/.claude/tmux.claude-team.conf'
+
+# Docker aliases
+alias dc='docker compose '
+alias dcu='docker compose up -d'
+alias dcd='docker compose down'
+alias dcr='docker compose run --rm runner'
+alias dcrst='docker compose restart'
+alias dcsd='docker stop $(docker ps -q)'
+
+# vim aliases
+alias vim='nvim'
+alias vimdiff='nvim -d '
+alias lvim='NVIM_APPNAME=lazyvim nvim'
+alias lazyvim='NVIM_APPNAME=lazyvim nvim'
+
+# one liner command
+alias strip-comment="sed -e 's|//.*||' -e 's|/\*.*\*/||g'"
+alias terminalizer='npx terminalizer'
+
+# with options
 if [[ "$(uname -s)" == "Darwin" ]]; then
   # macOS: Homebrew GNU utilities
   alias ls="LC_COLLATE=C $(brew --prefix)/bin/gls --group-directories-first --color=auto"
@@ -21,31 +50,6 @@ else
   alias ls='LC_COLLATE=C ls --group-directories-first --color=auto'
   alias grep='grep --color=auto'
 fi
-alias strip-comment="sed -e 's|//.*||' -e 's|/\*.*\*/||g'"
-alias terminalizer='npx terminalizer'
-
-alias vim='nvim'
-alias vimdff='nvim -d '
-alias lazyvim='NVIM_APPNAME=lazyvim nvim'
-alias lvim='NVIM_APPNAME=lazyvim nvim'
-
-# git aliases
-alias gpc='gh pr create -w '
-
-# Docker aliases
-alias dc='docker compose '
-alias dcu='(cd dockerdev && docker compose up -d) || docker compose up -d'
-alias dcd='docker compose down'
-alias dcr='(cd dockerdev && docker compose run --rm runner) || docker compose run --rm runner '
-alias dcrst='docker compose restart'
-alias dcsd='docker stop $(docker ps -q)'
-
-# Claude and Ollama
-alias claude-ollama='ANTHROPIC_AUTH_TOKEN=ollama ANTHROPIC_BASE_URL=http://localhost:11434 claude --model=qwen3:8b-for-claude'
-#alias claude-ollama="HOME=$HOME/tools/ollama claude"
-
-# Claude and tmux
-alias claude-tmux='tmux new-session; source-file ~/.claude/tmux.claude-team.conf'
 
 # Load local aliases if the file exists
 source ~/.alias.local 2> /dev/null || true
