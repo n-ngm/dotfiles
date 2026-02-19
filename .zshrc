@@ -174,4 +174,3 @@ add-zsh-hook precmd _tmux_refresh
 # Added by Antigravity
 export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 eval "$(mise activate zsh)"
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
