@@ -6,12 +6,15 @@
     "allow": [
       "Bash",
       "WebFetch(domain:*.github.com)",
-      "mcp__voicevox__speak",
       "mcp__github__get_*",
       "mcp__github__list_*",
       "mcp__github__search_*",
       "mcp__github__pull_request_read",
-      "Read(**/.claude/settings.voicebox.json)"
+      "Read(~/.claude/settings.voicebox.json)",
+      "Read(**/.claude/settings.voicebox.json)",
+      "Glob(~/.claude/**)",
+      "Glob(**/.claude/**)",
+      "mcp__plugin_voicebox_mcp-server-voicevox__*"
     ],
     "deny": [
       "Bash(sudo:*)",
@@ -41,5 +44,7 @@
       "mcp__github__update_*"
     ]
   },
-  "enabledPlugins": {}
+  "enabledPlugins": {
+    "voicebox@voicebox": true
+  }
 }
