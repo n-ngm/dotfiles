@@ -232,6 +232,8 @@ def process_hook_message(
             elif message.startswith("Claude Code needs your attention"):
                 question, _ = extract_last_assistant_message(transcript_path)
                 return question or notifications.get("question", "質問がある")
+            elif message.startswith("Claude Code needs your approval"):
+                return notifications.get("permission_needed", "許可が必要")
             else:
                 return message or notifications.get("permission_needed", "許可が必要")
         return notifications.get("permission_needed", "許可が必要")
