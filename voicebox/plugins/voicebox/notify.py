@@ -213,6 +213,8 @@ def process_hook_message(
     """Process hook event and return appropriate message."""
     if hook_event == "Stop":
         # Priority: transcript (current) > last_assistant_message (1 turn behind)
+        # Wait for transcript to be flushed
+        time.sleep(0.5)
         transcript_msg, _ = extract_last_assistant_message(transcript_path)
         msg = transcript_msg or last_assistant_message
         if msg:
