@@ -213,15 +213,14 @@ def process_hook_message(
     """Process hook event and return appropriate message."""
     if hook_event == "Stop":
         # Priority: transcript (current) > last_assistant_message (1 turn behind)
-        # Poll transcript until it updates (file size changes = new message written)
+        # Poll until transcript has a newer message than last_assistant_message
+        last_first_line = last_assistant_message.split("\n")[0] if last_assistant_message else None
         transcript_msg = None
-        if transcript_path and os.path.exists(transcript_path):
-            initial_size = os.path.getsize(transcript_path)
-            for _ in range(10):
-                time.sleep(0.3)
-                if os.path.getsize(transcript_path) != initial_size:
-                    break
+        for _ in range(10):
+            time.sleep(0.3)
             transcript_msg, _ = extract_last_assistant_message(transcript_path)
+            if transcript_msg and transcript_msg != last_first_line:
+                break
         msg = transcript_msg or last_assistant_message
         if msg:
             msg = msg.split("\n")[0]
