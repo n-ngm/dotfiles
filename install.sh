@@ -9,7 +9,12 @@ ln -snf $SCRIPT_DIR/.tmux.conf .tmux.conf
 ln -snf $SCRIPT_DIR/.vimrc     .vimrc
 ln -snf $SCRIPT_DIR/.zshrc     .zshrc
 ln -snf $SCRIPT_DIR/.alias     .alias
-ln -snf $SCRIPT_DIR/.Brewfile  .Brewfile
+# Brewfile (OS-specific)
+if [ "$OS" = "Darwin" ]; then
+  ln -snf $SCRIPT_DIR/.Brewfile.mac .Brewfile
+elif [ "$OS" = "Linux" ]; then
+  ln -snf $SCRIPT_DIR/.Brewfile.ubuntu .Brewfile
+fi
 ln -snf $SCRIPT_DIR/.claude    .claude
 
 # macOS only

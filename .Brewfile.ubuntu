@@ -1,0 +1,30 @@
+# tap "homebrew/bundle" # deprecated.
+# tap "jesseduffield/lazydocker"
+# tap "universal-ctags/universal-ctags"
+
+# Shell & Terminal
+brew "sheldon"                                  # aptにない
+#brew "zellij"                                   # omakub
+
+# CLI Utilities
+#brew "fzf"                                      # apt版(0.44)が古い、brew(0.55+)
+
+# Git & Version Control
+brew "git-now"                                  # aptにない
+brew "gitui"                                    # aptにない
+
+# Development
+# brew "anyenv"                                   # aptにない
+# brew "pnpm"                                     # aptにない
+
+# AI & LLM Tools
+# brew "llm"                                      # ollama使わないのでいらない
+brew "gemini-cli"                               # aptにない
+
+# Container Tools
+#brew "jesseduffield/lazydocker/lazydocker"       # omakub
+
+# Editors & IDEs
+# brew "neovim"                                   # apt版(0.9.5)が古い、brew(0.10+)、ソースで入れた(0.11)
+#brew "universal-ctags", args: ["HEAD"]           # tree-sitter を使うので不要 HEADビルドはbrewのみ
+brew "opencode"                                 # aptにない 
