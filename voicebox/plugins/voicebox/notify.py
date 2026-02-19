@@ -206,14 +206,18 @@ def extract_last_assistant_message(transcript_path: str) -> tuple[str | None, in
 def process_hook_message(
     hook_event: str,
     message: str | None,
+    last_assistant_message: str | None,
     transcript_path: str | None,
     notifications: dict,
 ) -> str:
     """Process hook event and return appropriate message."""
     if hook_event == "Stop":
-        if not message:
-            message, _ = extract_last_assistant_message(transcript_path)
-        return message or notifications.get("task_complete", "タスク完了")
+        # Priority: transcript (current) > last_assistant_message (1 turn behind)
+        transcript_msg, _ = extract_last_assistant_message(transcript_path)
+        msg = transcript_msg or last_assistant_message
+        if msg:
+            msg = msg.split("\n")[0]
+        return msg or notifications.get("task_complete", "タスク完了")
 
     elif hook_event == "Notification":
         if message:
@@ -334,6 +338,7 @@ def main():
 
     hook_event = input_data.get("hook_event_name", "")
     message = input_data.get("message")
+    last_assistant_message = input_data.get("last_assistant_message")
     transcript_path = input_data.get("transcript_path")
     cwd = input_data.get("cwd")
 
@@ -350,7 +355,7 @@ def main():
         voicevox_speaker_id = transcript_speaker_id
 
     # Process message
-    text = process_hook_message(hook_event, message, transcript_path, notifications)
+    text = process_hook_message(hook_event, message, last_assistant_message, transcript_path, notifications)
 
     # Get session title
     title = extract_session_title(transcript_path)
