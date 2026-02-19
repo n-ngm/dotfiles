@@ -8,5 +8,9 @@
 例: feat: add thread reply feature
 ```
 
+- typeの種類: feat, fix, docs, style, refactor, test, chore
 - なるべく１行で
-- Claudeの署名も不要
+
+### Import
+
+VoiceBox: @~/dotfiles/voicebox/plugins/voicebox/CLAUDE.md
