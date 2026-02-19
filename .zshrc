@@ -1,12 +1,10 @@
 # Ctrl+D でシェルが閉じないようにする
 setopt IGNORE_EOF
-bindkey -r '^D'
 
 # envs
 export LANG=ja_JP.UTF-8
 source "${HOME}/.env"
 
-source $HOME/.local/bin/env 2>/dev/null
 
 # Homebrew
 if [[ -x /opt/homebrew/bin/brew ]]; then
@@ -39,7 +37,29 @@ eval "$(direnv hook zsh)"
 eval "$(sheldon source)"
 
 # prompt
-PROMPT='❯ '
+setopt PROMPT_SUBST
+autoload -Uz add-zsh-hook
+
+function _update_git_branch() {
+  _git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+}
+add-zsh-hook precmd _update_git_branch
+
+function _prompt_git() {
+  [[ -n "$_git_branch" ]] && echo " %F{cyan}${_git_branch}%f"
+}
+
+PROMPT='%F{blue}%~%f$(_prompt_git)
+❯ '
+
+function _transient_accept_line() {
+  PROMPT='❯ '
+  zle reset-prompt
+  PROMPT='%F{blue}%~%f$(_prompt_git)
+❯ '
+  zle .accept-line
+}
+zle -N accept-line _transient_accept_line
 
 # history
 export HISTFILE=~/.zsh_history
@@ -64,8 +84,6 @@ fi
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
 
 
-# uv
-source $HOME/.local/bin/env
 
 ###-begin-npm-completion-###
 #
@@ -146,12 +164,14 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
 # tmux
-function precmd() {
+function _tmux_refresh() {
     if [ ! -z $TMUX ]; then
         tmux refresh-client -S
     fi
 }
+add-zsh-hook precmd _tmux_refresh
 
 # Added by Antigravity
 export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 eval "$(mise activate zsh)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
