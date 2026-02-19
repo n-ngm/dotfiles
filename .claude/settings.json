@@ -11,7 +11,7 @@
       "mcp__github__list_*",
       "mcp__github__search_*",
       "mcp__github__pull_request_read",
-      "Read(**/.claude/settings.local.json)"
+      "Read(**/.claude/settings.voicebox.json)"
     ],
     "deny": [
       "Bash(sudo:*)",
