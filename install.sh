@@ -37,14 +37,9 @@ cd .vim/rc
 ln -snf $SCRIPT_DIR/.vim/rc/dein.toml dein.toml
 ln -snf $SCRIPT_DIR/.vim/rc/dein_lazy.toml dein_lazy.toml
 
-# Claude Code plugins
-if command -v claude &> /dev/null; then
-  claude marketplace add "$SCRIPT_DIR/voicebox"
-fi
-
 cd $HOME
-mkdir -p bin
-cd bin
+mkdir -p .local/bin
+cd .local/bin
 ln -snf $SCRIPT_DIR/bin/ai-commit-message ai-commit-message
 ln -snf $SCRIPT_DIR/bin/ai-pull-request ai-pull-request
 ln -snf $SCRIPT_DIR/bin/termcolor.pl termcolor.pl
