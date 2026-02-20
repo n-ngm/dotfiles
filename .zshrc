@@ -1,6 +1,18 @@
 # Ctrl+D でシェルが閉じないようにする
 setopt IGNORE_EOF
 
+# Ctrl+D: 空入力時は exit、入力ありの時はデフォルト動作(補完候補表示)
+function _ctrl_d_handler() {
+  if [[ -z "$BUFFER" ]]; then
+    BUFFER="exit"
+    zle end-of-line
+  else
+    zle delete-char-or-list
+  fi
+}
+zle -N _ctrl_d_handler
+bindkey '^D' _ctrl_d_handler
+
 # envs
 export LANG=ja_JP.UTF-8
 source "${HOME}/.env"
