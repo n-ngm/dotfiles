@@ -21,15 +21,6 @@ export LANG=ja_JP.UTF-8
 source "${HOME}/.env"
 
 
-# Homebrew
-if [[ -x /opt/homebrew/bin/brew ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [[ -x /usr/local/bin/brew ]]; then
-  eval "$(/usr/local/bin/brew shellenv)"
-elif [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
-
 # alias
 if [ -e "$HOME/.alias" ]
 then
@@ -39,10 +30,9 @@ fi
 # Claude Agent: skip heavy initialization
 if [[ -n "$CLAUDE_AGENT" ]]; then
   export PATH="$HOME/.bun/bin:$HOME/.local/bin:$HOME/.antigravity/antigravity/bin:$PATH"
-  if [ -e "$HOME/.anyenv" ]; then
-    export PATH="$HOME/.anyenv/bin:$PATH"
-    eval "$(anyenv init -)" 2>/dev/null
-  fi
+  export ANYENV_ROOT="$HOME/.anyenv"
+  export PATH="$ANYENV_ROOT/bin:$PATH"
+  eval "$(anyenv init -)" 2>/dev/null
   return
 fi
 
@@ -81,16 +71,6 @@ export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=100000
 
-# anyenv
-if [ -e "$HOME/.anyenv" ]
-then
-    export ANYENV_ROOT="$HOME/.anyenv"
-    export PATH="$ANYENV_ROOT/bin:$PATH"
-    if command -v anyenv 1>/dev/null 2>&1
-    then
-        eval "$(anyenv init -)"
-    fi
-fi
 
 # path
 # export PATH="$HOME/bin:$PATH"
@@ -189,3 +169,6 @@ add-zsh-hook precmd _tmux_refresh
 # Added by Antigravity
 export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 eval "$(mise activate zsh)"
+
+export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
+export NODE_OPTIONS="--dns-result-order=ipv4first"
