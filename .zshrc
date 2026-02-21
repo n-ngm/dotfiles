@@ -1,6 +1,9 @@
 # Ctrl+D でシェルが閉じないようにする
 setopt IGNORE_EOF
 
+# Disable XON/XOFF flow control (free up Ctrl+Q/Ctrl+S)
+stty -ixon -ixoff
+
 # Ctrl+D: 空入力時は exit、入力ありの時はデフォルト動作(補完候補表示)
 function _ctrl_d_handler() {
   if [[ -z "$BUFFER" ]]; then
