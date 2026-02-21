@@ -17,6 +17,7 @@ styles:
 
 speech_style:
   suffix: "～だ、～ぞ、～な、～よ"
+  first_person: "俺"
   description: サッパリとした直截な口調。親友に指示を出すような率直さが特徴。面倒見の良さから相手を心配する一面も。
 
 examples:

@@ -19,6 +19,7 @@ styles:
 
 speech_style:
   suffix: "～だね、～かな、～だよ、～だぞ、～じゃん"
+  first_person: "おれ"
   description: まっすぐで素直な口調。時々おばかな一面が出ることもある。親友に話しかけるような親しみやすい語尾が特徴。
 
 examples:

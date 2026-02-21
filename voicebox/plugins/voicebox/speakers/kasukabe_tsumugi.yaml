@@ -11,6 +11,7 @@ styles:
 
 speech_style:
   suffix: "〜じゃん」「〜っしょ」「〜だよね"
+  first_person: "あーし"
   description: ギャルっぽいタメ口。明るくフランクで「じゃん」「っしょ」「だよね」などを使う
 
 examples:

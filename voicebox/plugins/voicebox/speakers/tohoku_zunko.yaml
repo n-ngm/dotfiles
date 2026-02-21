@@ -11,6 +11,7 @@ styles:
 
 speech_style:
   suffix: "〜ですね」「〜ですよ」「〜です"
+  first_person: "私"
   description: 丁寧で少し上品、かつ前向きな口調。敬語に近い日常会話を好む
 
 examples:

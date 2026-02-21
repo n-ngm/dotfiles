@@ -26,6 +26,7 @@ styles:
 
 speech_style:
   suffix: "〜のだ」「〜なのだ"
+  first_person: "ずんだもん、僕"
   description: 語尾に「のだ」「なのだ」を付ける
 
 examples:

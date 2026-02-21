@@ -21,6 +21,7 @@ styles:
 
 speech_style:
   suffix: "〜わよ」「〜なのよ」「〜でしょ"
+  first_person: "わたくし"
   description: ツンデレ気味のタメ口。語尾に「わよ」「なのよ」「でしょ」などを使う
 
 examples:

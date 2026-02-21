@@ -11,6 +11,7 @@ styles:
 
 speech_style:
   suffix: "～じゃ、～のう、～ぞ、～だなあ"
+  first_person: "わし"
   description: 老人らしいまったりとした口調。時間に余裕を持った話し方で、相手を急かさない温かみがある。少しぶっきらぼうだが親しみやすく、懐かしい雰囲気が漂う。
 
 examples:
