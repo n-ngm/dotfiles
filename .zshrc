@@ -21,6 +21,15 @@ export LANG=ja_JP.UTF-8
 source "${HOME}/.env"
 
 
+# Homebrew
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -x /usr/local/bin/brew ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+elif [[ -x "${HOME}/.linuxbrew/bin/brew" ]]; then
+  eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"
+fi
+
 # alias
 if [ -e "$HOME/.alias" ]
 then
@@ -54,13 +63,13 @@ function _prompt_git() {
   [[ -n "$_git_branch" ]] && echo " %F{cyan}${_git_branch}%f"
 }
 
-PROMPT='%F{blue}%~%f$(_prompt_git)
+PROMPT='%K{blue}%F{black}%~%f%k$(_prompt_git)
 ❯ '
 
 function _transient_accept_line() {
   PROMPT='❯ '
   zle reset-prompt
-  PROMPT='%F{blue}%~%f$(_prompt_git)
+  PROMPT='%K{blue}%F{black}%~%f%k$(_prompt_git)
 ❯ '
   zle .accept-line
 }
@@ -172,3 +181,14 @@ eval "$(mise activate zsh)"
 
 export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
 export NODE_OPTIONS="--dns-result-order=ipv4first"
+
+# OpenClaw Completion
+source "/home/developer/.openclaw/completions/openclaw.zsh"
+
+# pnpm
+export PNPM_HOME="/home/developer/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
