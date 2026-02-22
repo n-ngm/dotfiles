@@ -2,3 +2,7 @@
 !CLAUDE.md
 !settings.json
 !.gitignore
+!/commands/
+!/commands/**
+!/scripts/
+!/scripts/**
