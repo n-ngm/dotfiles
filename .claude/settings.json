@@ -10,6 +10,7 @@
       "mcp__github__list_*",
       "mcp__github__search_*",
       "mcp__github__pull_request_read",
+      "Read(~/**/voicebox/speakers/*)",
       "Read(~/.claude/settings.voicebox.json)",
       "Read(**/.claude/settings.voicebox.json)",
       "Glob(~/.claude/**)",
