@@ -6,7 +6,7 @@ set -euo pipefail
 
 SESSION_ID="${1:?Usage: collect.sh <session-id>}"
 
-PROJECT_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+PROJECT_ROOT="$(pwd)"
 STATUS_DIR="$PROJECT_ROOT/tmp/parallel/$SESSION_ID"
 
 if [ ! -d "$STATUS_DIR" ]; then

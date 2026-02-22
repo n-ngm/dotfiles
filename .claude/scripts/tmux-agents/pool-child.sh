@@ -14,7 +14,7 @@ echo ""
 
 # claude をインタラクティブ起動（引数なし）
 # dispatch.sh が tmux paste-buffer でプロンプトを送信する
-claude
+claude --permission-mode acceptEdits
 
 echo ""
 echo "=== Worker $WORKER_ID: Claude exited ==="

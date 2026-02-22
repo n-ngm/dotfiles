@@ -7,7 +7,7 @@ set -euo pipefail
 TASKS_FILE="${1:?Usage: launch-pool.sh <tasks-json-file> <session-id> [worker-count]}"
 SESSION_ID="${2:?Usage: launch-pool.sh <tasks-json-file> <session-id> [worker-count]}"
 
-PROJECT_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+PROJECT_ROOT="$(pwd)"
 SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 STATUS_DIR="$PROJECT_ROOT/tmp/parallel/$SESSION_ID"
 

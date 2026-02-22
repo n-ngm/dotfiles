@@ -31,7 +31,7 @@ echo ""
 
 # claude起動（TUIモードで直接実行）
 EXIT_CODE=0
-claude "$PROMPT" || EXIT_CODE=$?
+claude --permission-mode acceptEdits -- "$PROMPT" || EXIT_CODE=$?
 
 # 完了タイムスタンプ
 date +%s > "$STATUS_DIR/$TASK_ID.finished_at"

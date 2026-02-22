@@ -8,7 +8,7 @@ set -euo pipefail
 SESSION_ID="${1:?Usage: dispatch.sh <session-id> [poll-interval]}"
 POLL_INTERVAL="${2:-3}"
 
-PROJECT_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+PROJECT_ROOT="$(pwd)"
 SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 STATUS_DIR="$PROJECT_ROOT/tmp/parallel/$SESSION_ID"
 QUEUE_FILE="$STATUS_DIR/queue.json"

@@ -7,7 +7,7 @@ set -euo pipefail
 SESSION_ID="${1:?Usage: monitor.sh <session-id> [poll-interval-seconds]}"
 POLL_INTERVAL="${2:-5}"
 
-PROJECT_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+PROJECT_ROOT="$(pwd)"
 STATUS_DIR="$PROJECT_ROOT/tmp/parallel/$SESSION_ID"
 
 if [ ! -d "$STATUS_DIR" ]; then
@@ -114,7 +114,7 @@ while true; do
     echo -e "${GREEN}${BOLD}ALL COMPLETE${NC}"
     echo ""
     echo "Run collect.sh to gather results:"
-    echo "  bash .claude/scripts/tmux-agents/collect.sh $SESSION_ID"
+    echo "  bash $HOME/.claude/scripts/tmux-agents/collect.sh $SESSION_ID"
     exit 0
   fi
 

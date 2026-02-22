@@ -28,7 +28,7 @@ JSON配列でない場合は、ユーザーと対話してタスクリストを�
 
 ```bash
 SESSION_ID=$(uuidgen)
-SCRIPTS_DIR=".claude/scripts/tmux-agents"
+SCRIPTS_DIR="$HOME/.claude/scripts/tmux-agents"
 ```
 
 タスクJSONを一時ファイルに書き出す:
@@ -84,7 +84,7 @@ bash "$SCRIPTS_DIR/cleanup.sh" "$SESSION_ID"
 
 ```bash
 SESSION_ID=$(uuidgen)
-SCRIPTS_DIR=".claude/scripts/tmux-agents"
+SCRIPTS_DIR="$HOME/.claude/scripts/tmux-agents"
 ```
 
 引数から `workers=N` を抽出し、タスクJSONを一時ファイルに書き出す:

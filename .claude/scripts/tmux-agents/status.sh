@@ -8,7 +8,7 @@ set -euo pipefail
 SESSION_ID="${1:?Usage: status.sh <session-id> [--logs]}"
 SHOW_LOGS="${2:-}"
 
-PROJECT_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+PROJECT_ROOT="$(pwd)"
 STATUS_DIR="$PROJECT_ROOT/tmp/parallel/$SESSION_ID"
 
 if [ ! -d "$STATUS_DIR" ]; then
@@ -82,6 +82,11 @@ for i in $(seq 0 $((TASK_COUNT - 1))); do
     STATUS=$(cat "$STATUS_FILE")
   else
     STATUS="pending"
+  fi
+
+  # summary.md が存在するのに status が running なら done として扱う
+  if [ "$STATUS" = "running" ] && [ -f "$STATUS_DIR/$TASK_ID.summary.md" ]; then
+    STATUS="done"
   fi
 
   ELAPSED=$(get_elapsed "$TASK_ID")
