@@ -15,7 +15,7 @@
       "Read(**/.claude/settings.voicebox.json)",
       "Glob(~/.claude/**)",
       "Glob(**/.claude/**)",
-      "mcp__plugin_voicebox_mcp-server-voicevox__*"
+      "mcp__plugin_voicebox_voicebox__*"
     ],
     "deny": [
       "Bash(sudo:*)",

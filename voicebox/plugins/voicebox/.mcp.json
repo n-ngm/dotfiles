@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "mcp-server-voicevox": {
-      "command": "uvx",
-      "args": ["mcp-server-voicevox", "--voicevox-url=http://localhost:50021"]
+    "voicebox": {
+      "command": "uv",
+      "args": ["run", "--script", "${CLAUDE_PLUGIN_ROOT}/mcp_server.py"]
     }
   }
 }
