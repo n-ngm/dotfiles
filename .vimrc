@@ -205,9 +205,7 @@ let g:vdebug_keymap = {
 \    "eval_visual" : "<Leader>e"
 \}
 
-imap <M-DOWN> <Plug>(copilot-next)
-imap <M-UP> <Plug>(copilot-previous)
-
+:lua require('copilot_config')
 :lua require('claudecode_config')
 
 " Find files using Telescope command-line sugar.

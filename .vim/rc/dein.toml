@@ -76,7 +76,7 @@ repo = 'theniceboy/vim-calc'
 
 # copilot
 [[plugins]]
-repo = 'github/copilot.vim'
+repo = 'zbirenbaum/copilot.lua'
 [[plugins]]
 repo = 'nvim-lua/plenary.nvim'
 
