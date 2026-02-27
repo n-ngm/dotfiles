@@ -107,10 +107,7 @@ def text_to_speech(
                         subprocess.run(player, check=False)
                         break
 
-        return json.dumps(
-            {"status": "ok", "file": tmpfile, "played": auto_play},
-            ensure_ascii=False,
-        )
+        return "ok"
 
     except requests.exceptions.ConnectionError:
         return "Error: Cannot connect to VOICEVOX Engine"
