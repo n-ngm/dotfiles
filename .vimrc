@@ -107,8 +107,6 @@ nnoremap <Leader>cr :ChromeReload<CR><C-l>
 nnoremap <Leader>sc :SyntasticCheck<CR>
 " calc
 nnoremap <LEADER>ca :call Calc()<CR>
-" copilot chat
-" nnoremap :cp :CopilotChat<CR>
 
 " buffer
 nnoremap <C-p> :bp<CR>
@@ -210,7 +208,7 @@ let g:vdebug_keymap = {
 imap <M-DOWN> <Plug>(copilot-next)
 imap <M-UP> <Plug>(copilot-previous)
 
-:lua require('copilot_chat_config.init')
+:lua require('claudecode_config')
 
 " Find files using Telescope command-line sugar.
 nnoremap <Leader>ff <cmd>Telescope find_files<cr>

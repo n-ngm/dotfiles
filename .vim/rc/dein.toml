@@ -77,19 +77,16 @@ repo = 'theniceboy/vim-calc'
 # copilot
 [[plugins]]
 repo = 'github/copilot.vim'
-[[plugins]] # depends on copoilot chat
+[[plugins]]
 repo = 'nvim-lua/plenary.nvim'
-[[plugins]] # CopilotChat
-repo = 'CopilotC-Nvim/CopilotChat.nvim'
-depends = ['github/copilot.vim', 'nvim-lua/plenary.nvim']
-branch = 'canary'
 
 # claude code
 [[plugins]]
-repo = 'greggh/claude-code.nvim'
-depends = ['nvim-lua/plenary.nvim']
-branch = 'main'
-# require claude-code setup
+repo = 'coder/claudecode.nvim'
+depends = ['folke/snacks.nvim']
+
+[[plugins]]
+repo = 'folke/snacks.nvim'
 
 # tag display
 [[plugins]]
