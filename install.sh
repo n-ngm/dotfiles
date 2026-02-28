@@ -30,6 +30,7 @@ cd $HOME
 mkdir -p .config/nvim
 cd .config/nvim
 ln -snf $SCRIPT_DIR/.vimrc init.vim
+ln -snf $SCRIPT_DIR/.config/nvim/lua lua
 
 cd $HOME
 mkdir -p .vim/rc
