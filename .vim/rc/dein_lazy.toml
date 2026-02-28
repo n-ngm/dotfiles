@@ -6,8 +6,3 @@
 repo = 'iamcco/markdown-preview.nvim'
 on_ft = ['markdown', 'pandoc.markdown', 'rmd']
 build = 'sh -c "cd app && npx --yes yarn install"'
-
-# php xdebug
-[[plugins]]
-on_ft = ['php']
-repo = 'vim-vdebug/vdebug'

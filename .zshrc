@@ -182,9 +182,6 @@ eval "$(mise activate zsh)"
 export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
 export NODE_OPTIONS="--dns-result-order=ipv4first"
 
-# OpenClaw Completion
-source "/home/developer/.openclaw/completions/openclaw.zsh"
-
 # pnpm
 export PNPM_HOME="/home/developer/.local/share/pnpm"
 case ":$PATH:" in
