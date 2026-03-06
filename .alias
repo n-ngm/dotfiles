@@ -1,5 +1,5 @@
 # One character shortcuts
-alias c='claude'
+c() { if [ $# -eq 0 ]; then claude; else git checkout "$@"; fi }
 alias e='vim'
 alias f='fd . '
 alias g='git'
