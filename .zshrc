@@ -39,9 +39,7 @@ fi
 # Claude Agent: skip heavy initialization
 if [[ -n "$CLAUDE_AGENT" ]]; then
   export PATH="$HOME/.bun/bin:$HOME/.local/bin:$HOME/.antigravity/antigravity/bin:$PATH"
-  export ANYENV_ROOT="$HOME/.anyenv"
-  export PATH="$ANYENV_ROOT/bin:$PATH"
-  eval "$(anyenv init -)" 2>/dev/null
+  eval "$(mise activate zsh --shims)" 2>/dev/null
   return
 fi
 
@@ -63,13 +61,13 @@ function _prompt_git() {
   [[ -n "$_git_branch" ]] && echo " %F{cyan}${_git_branch}%f"
 }
 
-PROMPT='%K{blue}%F{black}%~%f%k$(_prompt_git)
+PROMPT='%(1j.%K{yellow}%F{black}(%j)%f%k .)%K{blue}%F{black}%~%f%k$(_prompt_git)
 ❯ '
 
 function _transient_accept_line() {
   PROMPT='❯ '
   zle reset-prompt
-  PROMPT='%K{blue}%F{black}%~%f%k$(_prompt_git)
+  PROMPT='%(1j.%K{yellow}%F{black}(%j)%f%k .)%K{blue}%F{black}%~%f%k$(_prompt_git)
 ❯ '
   zle .accept-line
 }
