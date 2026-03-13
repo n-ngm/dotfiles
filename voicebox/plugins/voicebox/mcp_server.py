@@ -13,7 +13,9 @@ import platform
 import shutil
 import subprocess
 import tempfile
+import threading
 import time
+from typing import List
 
 import requests
 from mcp.server.fastmcp import FastMCP
@@ -51,34 +53,42 @@ def text_to_speech(
         speed: Playback speed. Default is 1.3.
         auto_play: Whether to automatically play the generated audio. Default is True.
     """
+    wav_data = _synthesize(text, speaker_id, speed)
+    if isinstance(wav_data, str):
+        return f"Error: {wav_data}"
+
     tmpfile = None
-    for _ in range(3):
-        try:
-            fd, tmpfile = tempfile.mkstemp(
-                suffix=".wav", prefix=f"voicevox.{os.getpid()}."
-            )
-            os.close(fd)
-            break
-        except OSError:
-            time.sleep(0.1)
-
-    if not tmpfile:
-        tmpfile = f"/tmp/voicevox.{os.getpid()}.{int(time.time() * 1000)}.wav"
-
     try:
-        # Create audio query
+        fd, tmpfile = tempfile.mkstemp(
+            suffix=".wav", prefix=f"voicevox.{os.getpid()}."
+        )
+        os.close(fd)
+        with open(tmpfile, "wb") as f:
+            f.write(wav_data)
+
+        if auto_play:
+            _play(tmpfile)
+
+        return "ok"
+    except Exception as e:
+        return f"Error: {e}"
+    finally:
+        if tmpfile and os.path.exists(tmpfile):
+            os.remove(tmpfile)
+
+
+def _synthesize(text: str, speaker_id: int, speed: float) -> bytes | str:
+    """Synthesize a single text and return WAV bytes, or an error string."""
+    try:
         resp = requests.post(
             f"{VOICEVOX_HOST}/audio_query",
             params={"text": text, "speaker": speaker_id},
             timeout=10,
         )
         if not resp.ok:
-            return f"Error: VOICEVOX audio_query failed: {resp.status_code}"
-
+            return f"audio_query failed: {resp.status_code}"
         query = resp.json()
         query["speedScale"] = speed
-
-        # Synthesize audio
         resp = requests.post(
             f"{VOICEVOX_HOST}/synthesis",
             params={"speaker": speaker_id},
@@ -87,35 +97,97 @@ def text_to_speech(
             timeout=30,
         )
         if not resp.ok:
-            return f"Error: VOICEVOX synthesis failed: {resp.status_code}"
+            return f"synthesis failed: {resp.status_code}"
+        return resp.content
+    except requests.exceptions.ConnectionError:
+        return "Cannot connect to VOICEVOX Engine"
+    except Exception as e:
+        return str(e)
 
-        # Save audio
-        with open(tmpfile, "wb") as f:
-            f.write(resp.content)
 
-        # Play audio
-        if auto_play:
-            if platform.system() == "Darwin":
-                subprocess.run(["afplay", tmpfile], check=False)
-            else:
-                for player in [
-                    ["paplay", tmpfile],
-                    ["aplay", tmpfile],
-                    ["mpv", "--no-video", tmpfile],
-                ]:
-                    if shutil.which(player[0]):
-                        subprocess.run(player, check=False)
-                        break
+def _play(filepath: str) -> None:
+    """Play a WAV file using the platform's player."""
+    if platform.system() == "Darwin":
+        subprocess.run(["afplay", filepath], check=False)
+    else:
+        for player in [
+            ["paplay", filepath],
+            ["aplay", filepath],
+            ["mpv", "--no-video", filepath],
+        ]:
+            if shutil.which(player[0]):
+                subprocess.run(player, check=False)
+                break
 
+
+@mcp.tool()
+def text_to_speech_batch(
+    texts: List[str],
+    speaker_id: int = 1,
+    speed: float = 1.3,
+    auto_play: bool = True,
+) -> str:
+    """Convert multiple texts to speech and play them seamlessly.
+
+    Synthesizes the next audio while the current one is playing (pipeline),
+    so there is almost no gap between sentences.
+
+    Args:
+        texts: List of texts to convert to speech.
+        speaker_id: Speaker ID (voice). Default is 1.
+        speed: Playback speed. Default is 1.3.
+        auto_play: Whether to automatically play the generated audio. Default is True.
+    """
+    if not texts:
         return "ok"
 
-    except requests.exceptions.ConnectionError:
-        return "Error: Cannot connect to VOICEVOX Engine"
+    errors = []
+    tmpfiles = []
+
+    try:
+        wav_data = _synthesize(texts[0], speaker_id, speed)
+
+        for i in range(len(texts)):
+            if isinstance(wav_data, str):
+                errors.append(f"[{i}] Error: {wav_data}")
+                wav_data = None
+            else:
+                # Save current audio to temp file
+                fd, tmpfile = tempfile.mkstemp(
+                    suffix=".wav", prefix=f"voicevox.{os.getpid()}."
+                )
+                os.close(fd)
+                tmpfiles.append(tmpfile)
+                with open(tmpfile, "wb") as f:
+                    f.write(wav_data)
+
+            # Pipeline: start synthesizing next while playing current
+            next_result = [None]
+            if i + 1 < len(texts):
+                def synth_next(text=texts[i + 1]):
+                    next_result[0] = _synthesize(text, speaker_id, speed)
+                synth_thread = threading.Thread(target=synth_next)
+                synth_thread.start()
+
+            # Play current
+            if auto_play and not isinstance(wav_data, (str, type(None))):
+                _play(tmpfile)
+
+            # Wait for next synthesis to finish
+            if i + 1 < len(texts):
+                synth_thread.join()
+                wav_data = next_result[0]
+
+        if errors:
+            return "partial errors: " + "; ".join(errors)
+        return "ok"
+
     except Exception as e:
         return f"Error: {e}"
     finally:
-        if tmpfile and os.path.exists(tmpfile):
-            os.remove(tmpfile)
+        for f in tmpfiles:
+            if os.path.exists(f):
+                os.remove(f)
 
 
 if __name__ == "__main__":
