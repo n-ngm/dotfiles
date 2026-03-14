@@ -9,6 +9,11 @@ styles:
     name: "ノーマル"
     default: true
 
+singing_styles:
+  - id: 3042
+    name: "ノーマル"
+    default: true
+
 speech_style:
   suffix: "～じゃ、～のう、～ぞ、～だなあ"
   first_person: "わし"

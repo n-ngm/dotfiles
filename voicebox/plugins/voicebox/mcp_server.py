@@ -121,6 +121,87 @@ def _play(filepath: str) -> None:
 
 
 @mcp.tool()
+def sing(
+    score: dict,
+    speaker_id: int = 6000,
+    auto_play: bool = True,
+) -> str:
+    """Synthesize singing voice from a musical score using VOICEVOX.
+
+    Args:
+        score: Musical score dict with "notes" list.
+               Each note: {"key": MIDI_NUMBER|null, "frame_length": int, "lyric": str}
+               - key: MIDI note number (60=C4). null for silence.
+               - frame_length: Duration in frames (93.75Hz). 45≈0.48s.
+               - lyric: Single kana character per note. Empty string for silence.
+               First and last notes should be silence (key=null).
+        speaker_id: Singer ID for synthesis. Default is 6000.
+        auto_play: Whether to automatically play the generated audio. Default is True.
+    """
+    wav_data = _synthesize_singing(score, speaker_id)
+    if isinstance(wav_data, str):
+        return f"Error: {wav_data}"
+
+    tmpfile = None
+    try:
+        fd, tmpfile = tempfile.mkstemp(
+            suffix=".wav", prefix=f"voicevox_sing.{os.getpid()}."
+        )
+        os.close(fd)
+        with open(tmpfile, "wb") as f:
+            f.write(wav_data)
+
+        if auto_play:
+            _play(tmpfile)
+
+        return "ok"
+    except Exception as e:
+        return f"Error: {e}"
+    finally:
+        if tmpfile and os.path.exists(tmpfile):
+            os.remove(tmpfile)
+
+
+def _synthesize_singing(score: dict, speaker: int) -> bytes | str:
+    """Synthesize singing audio from a score. Returns WAV bytes or error string."""
+    try:
+        resp = requests.post(
+            f"{VOICEVOX_HOST}/sing_frame_audio_query",
+            params={"speaker": speaker},
+            headers={"Content-Type": "application/json"},
+            data=json.dumps(score),
+            timeout=30,
+        )
+        if not resp.ok:
+            # Fallback: use speaker 6000 for query, target speaker for synthesis
+            resp = requests.post(
+                f"{VOICEVOX_HOST}/sing_frame_audio_query",
+                params={"speaker": 6000},
+                headers={"Content-Type": "application/json"},
+                data=json.dumps(score),
+                timeout=30,
+            )
+            if not resp.ok:
+                return f"sing_frame_audio_query failed: {resp.status_code} {resp.text[:200]}"
+        query = resp.json()
+
+        resp = requests.post(
+            f"{VOICEVOX_HOST}/frame_synthesis",
+            params={"speaker": speaker},
+            headers={"Content-Type": "application/json"},
+            data=json.dumps(query),
+            timeout=60,
+        )
+        if not resp.ok:
+            return f"frame_synthesis failed: {resp.status_code} {resp.text[:200]}"
+        return resp.content
+    except requests.exceptions.ConnectionError:
+        return "Cannot connect to VOICEVOX Engine"
+    except Exception as e:
+        return str(e)
+
+
+@mcp.tool()
 def text_to_speech_batch(
     texts: List[str],
     speaker_id: int = 1,

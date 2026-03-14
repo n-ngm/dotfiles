@@ -9,6 +9,11 @@ styles:
     name: "ノーマル"
     default: true
 
+singing_styles:
+  - id: 3008
+    name: "ノーマル"
+    default: true
+
 speech_style:
   suffix: "〜じゃん」「〜っしょ」「〜だよね"
   first_person: "あーし"

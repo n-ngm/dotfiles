@@ -24,6 +24,23 @@ styles:
     name: "なみだめ"
 
 
+singing_styles:
+  - id: 3003
+    name: "ノーマル"
+  - id: 3001
+    name: "あまあま"
+    default: true
+  - id: 3007
+    name: "ツンツン"
+  - id: 3005
+    name: "セクシー"
+  - id: 3038
+    name: "ヒソヒソ"
+  - id: 3075
+    name: "ヘロヘロ"
+  - id: 3076
+    name: "なみだめ"
+
 speech_style:
   suffix: "〜のだ」「〜なのだ"
   first_person: "ずんだもん、僕"

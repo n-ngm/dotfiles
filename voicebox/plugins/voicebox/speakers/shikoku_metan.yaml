@@ -19,6 +19,19 @@ styles:
   - id: 37
     name: "ヒソヒソ"
 
+singing_styles:
+  - id: 3002
+    name: "ノーマル"
+  - id: 3000
+    name: "あまあま"
+  - id: 3006
+    name: "ツンツン"
+    default: true
+  - id: 3004
+    name: "セクシー"
+  - id: 3037
+    name: "ヒソヒソ"
+
 speech_style:
   suffix: "〜わよ」「〜なのよ」「〜でしょ"
   first_person: "わたくし"

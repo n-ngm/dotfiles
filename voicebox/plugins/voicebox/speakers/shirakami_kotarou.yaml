@@ -17,6 +17,19 @@ styles:
   - id: 35
     name: "びえーん"
 
+singing_styles:
+  - id: 3012
+    name: "ふつう"
+    default: true
+  - id: 3032
+    name: "わーい"
+  - id: 3033
+    name: "びくびく"
+  - id: 3034
+    name: "おこ"
+  - id: 3035
+    name: "びえーん"
+
 speech_style:
   suffix: "～だね、～かな、～だよ、～だぞ、～じゃん"
   first_person: "おれ"

@@ -15,6 +15,17 @@ styles:
   - id: 41
     name: "悲しみ"
 
+singing_styles:
+  - id: 3011
+    name: "ノーマル"
+    default: true
+  - id: 3039
+    name: "喜び"
+  - id: 3040
+    name: "ツンギレ"
+  - id: 3041
+    name: "悲しみ"
+
 speech_style:
   suffix: "～だ、～ぞ、～な、～よ"
   first_person: "俺"
