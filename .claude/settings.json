@@ -10,18 +10,25 @@
       "mcp__github__list_*",
       "mcp__github__search_*",
       "mcp__github__pull_request_read",
-      "Read(~/**/voicebox/speakers/*)",
-      "Read(~/.claude/settings.voicebox.json)",
-      "Read(**/.claude/settings.voicebox.json)",
-      "Glob(~/.claude/**)",
-      "Glob(**/.claude/**)",
-      "mcp__plugin_voicebox_voicebox__*"
+      "Read(~/.claude/settings.voicevox.json)",
+      "Read(**/.claude/settings.voicevox.json)",
+      "Read(**/voicevox/speakers/*.json)",
+      "Read(~/.claude/**)",
+      "Read(**/.claude/**)",
+      "mcp__plugin_voicevox_voicevox__*",
+      "mcp__todoist__*",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_navigate_back",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_console_messages",
+      "mcp__playwright__browser_network_requests",
+      "mcp__playwright__browser_wait_for"
     ],
     "deny": [
       "Bash(sudo:*)",
       "Read(id_rsa)",
       "Read(id_ed25519)",
-      "Read(**/*token*)",
       "Read(.env)"
     ],
     "ask": [
@@ -29,6 +36,7 @@
       "Bash(git push:*)",
       "Bash(git revert:*)",
       "Read(**/*key*)",
+      "Read(**/*token*)",
       "Bash(rm:*)",
       "Bash(rm -rf:*)",
       "mcp__github__add_*",
@@ -45,7 +53,20 @@
       "mcp__github__update_*"
     ]
   },
+  "model": "sonnet",
   "enabledPlugins": {
-    "voicebox@voicebox": true
-  }
+    "voicevox@claude-voicevox-plugin": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-voicevox-plugin": {
+      "source": {
+        "source": "github",
+        "repo": "n-ngm/claude-voicevox-plugin"
+      }
+    }
+  },
+  "language": "Japanese",
+  "feedbackSurveyRate": 0,
+  "effortLevel": "high",
+  "tui": "fullscreen"
 }
