@@ -173,17 +173,7 @@ function _tmux_refresh() {
 }
 add-zsh-hook precmd _tmux_refresh
 
-# Added by Antigravity
-export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 eval "$(mise activate zsh)"
 
 export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
 export NODE_OPTIONS="--dns-result-order=ipv4first"
-
-# pnpm
-export PNPM_HOME="/home/developer/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
