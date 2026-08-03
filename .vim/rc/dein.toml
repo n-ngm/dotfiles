@@ -74,9 +74,6 @@ repo = 'gorodinskiy/vim-coloresque'
 [[plugins]]
 repo = 'theniceboy/vim-calc'
 
-# copilot
-[[plugins]]
-repo = 'zbirenbaum/copilot.lua'
 [[plugins]]
 repo = 'nvim-lua/plenary.nvim'
 
