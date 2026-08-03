@@ -27,7 +27,7 @@ alias dcu='docker compose up -d'
 alias dcd='docker compose down'
 alias dcr='docker compose run --rm runner'
 alias dcrst='docker compose restart'
-alias dcsd='docker stop $(docker ps -q)'
+alias dcsd='docker stop $(docker ps -a -q)'
 
 # vim aliases
 alias vim='nvim'
