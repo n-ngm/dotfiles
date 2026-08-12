@@ -192,15 +192,8 @@ cask "gcloud-cli"
 # ============================================
 # Casks - Development Tools
 # ============================================
-cask "alacritty"
 cask "claude-code"
 cask "mitmproxy"
-
-# ============================================
-# Casks - Python Environments
-# ============================================
-cask "anaconda"
-cask "miniconda"
 
 # ============================================
 # Casks - Utilities
