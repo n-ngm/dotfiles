@@ -15,7 +15,10 @@ if [ "$OS" = "Darwin" ]; then
 elif [ "$OS" = "Linux" ]; then
   ln -snf $SCRIPT_DIR/.Brewfile.ubuntu .Brewfile
 fi
-ln -snf $SCRIPT_DIR/.claude    .claude
+mkdir -p .claude
+ln -snf $SCRIPT_DIR/.claude/commands  .claude/commands
+ln -snf $SCRIPT_DIR/.claude/scripts   .claude/scripts
+ln -snf $SCRIPT_DIR/.claude/CLAUDE.md .claude/CLAUDE.md
 
 # macOS only
 if [ "$OS" = "Darwin" ]; then
