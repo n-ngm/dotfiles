@@ -5,6 +5,7 @@
   "permissions": {
     "allow": [
       "Bash",
+      "WebSearch",
       "WebFetch(domain:*.github.com)",
       "mcp__github__get_*",
       "mcp__github__list_*",
@@ -53,9 +54,9 @@
       "mcp__github__update_*"
     ]
   },
-  "model": "sonnet",
   "enabledPlugins": {
-    "voicevox@claude-voicevox-plugin": true
+    "voicevox@claude-voicevox-plugin": true,
+    "todoist@doist": true
   },
   "extraKnownMarketplaces": {
     "claude-voicevox-plugin": {
@@ -63,10 +64,17 @@
         "source": "github",
         "repo": "n-ngm/claude-voicevox-plugin"
       }
+    },
+    "doist": {
+      "source": {
+        "source": "github",
+        "repo": "doist/todoist-mcp"
+      }
     }
   },
   "language": "Japanese",
   "feedbackSurveyRate": 0,
   "effortLevel": "high",
-  "tui": "fullscreen"
+  "tui": "fullscreen",
+  "theme": "dark"
 }
