@@ -6,7 +6,6 @@ OS="$(uname -s)"
 cd $HOME
 ln -snf $SCRIPT_DIR/.gitconfig .gitconfig
 ln -snf $SCRIPT_DIR/.tmux.conf .tmux.conf
-ln -snf $SCRIPT_DIR/.vimrc     .vimrc
 ln -snf $SCRIPT_DIR/.zshrc     .zshrc
 ln -snf $SCRIPT_DIR/.alias     .alias
 # Brewfile (OS-specific)
@@ -29,17 +28,14 @@ cd $HOME
 mkdir -p .config/sheldon
 ln -snf $SCRIPT_DIR/.config/sheldon/plugins.toml .config/sheldon/plugins.toml
 
+# nvim (lazy-lock.json も dotfiles 側に置くためディレクトリごとリンクする)
 cd $HOME
-mkdir -p .config/nvim
-cd .config/nvim
-ln -snf $SCRIPT_DIR/.vimrc init.vim
-ln -snf $SCRIPT_DIR/.config/nvim/lua lua
-
-cd $HOME
-mkdir -p .vim/rc
-cd .vim/rc
-ln -snf $SCRIPT_DIR/.vim/rc/dein.toml dein.toml
-ln -snf $SCRIPT_DIR/.vim/rc/dein_lazy.toml dein_lazy.toml
+mkdir -p .config
+if [ -e .config/nvim ] && [ ! -L .config/nvim ]; then
+  mv .config/nvim .config/nvim.bak
+  echo "既存の .config/nvim を .config/nvim.bak へ退避しました"
+fi
+ln -snf $SCRIPT_DIR/.config/nvim .config/nvim
 
 cd $HOME
 mkdir -p .local/bin
