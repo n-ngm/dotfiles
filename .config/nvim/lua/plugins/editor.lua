@@ -59,15 +59,6 @@ return {
     },
   },
 
-  -- タグ一覧
-  {
-    "preservim/tagbar",
-    cmd = "TagbarToggle",
-    keys = {
-      { "<F8>", "<Cmd>TagbarToggle<CR>", desc = "タグ一覧の開閉" },
-    },
-  },
-
   -- 電卓
   {
     "theniceboy/vim-calc",

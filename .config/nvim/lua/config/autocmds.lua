@@ -40,29 +40,6 @@ vim.api.nvim_create_autocmd({ "BufWinEnter", "WinNew" }, {
   end,
 })
 
--- 保存時に .tags を更新する
--- 既に .tags があるディレクトリでのみ動く。universal-ctags が必要
-vim.api.nvim_create_autocmd("BufWritePost", {
-  group = augroup("ctags"),
-  callback = function()
-    if vim.fn.executable("ctags") == 0 then
-      return
-    end
-    local tags_path = vim.fn.findfile(".tags", ".;")
-    if tags_path == "" then
-      return
-    end
-    vim.system({
-      "ctags",
-      "-R",
-      "--languages=php",
-      "--php-kinds=cdfin",
-      "-f",
-      ".tags",
-    }, { cwd = vim.fn.fnamemodify(tags_path, ":p:h") })
-  end,
-})
-
 -- ターミナルでは ambiwidth を single にする
 -- Claude Code の罫線文字が崩れるのを防ぐため
 vim.api.nvim_create_autocmd("TermOpen", {

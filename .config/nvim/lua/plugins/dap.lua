@@ -7,7 +7,6 @@ return {
         dependencies = { "nvim-neotest/nvim-nio" },
       },
     },
-    -- 旧 vdebug のキー割り当てを引き継いでいる
     keys = {
       {
         "<F5>",
@@ -77,28 +76,8 @@ return {
       dap.listeners.before.event_terminated.dapui = dapui.close
       dap.listeners.before.event_exited.dapui = dapui.close
 
-      -- PHP (Xdebug)
-      -- ポートとパスマッピングは旧 .vimrc の vdebug 設定から引き継いだもの
-      -- 実際に使うには vscode-php-debug の配置が必要:
-      --   git clone https://github.com/xdebug/vscode-php-debug ~/.local/share/php-debug
-      --   cd ~/.local/share/php-debug && npm install && npm run build
-      dap.adapters.php = {
-        type = "executable",
-        command = "node",
-        args = { vim.fn.expand("~/.local/share/php-debug/out/phpDebug.js") },
-      }
-
-      dap.configurations.php = {
-        {
-          type = "php",
-          request = "launch",
-          name = "Xdebug を待ち受ける",
-          port = 9003,
-          pathMappings = {
-            ["/app"] = vim.fn.expand("~/Projects/HotStartup/peraichi"),
-          },
-        },
-      }
+      -- アダプタは未設定
+      -- 使う言語が決まったら dap.adapters / dap.configurations をここに追加する
     end,
   },
 }

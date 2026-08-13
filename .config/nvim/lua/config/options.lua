@@ -50,7 +50,3 @@ opt.wrapscan = false
 -- spell
 -- 綴り確認は spelunker.vim に任せるため本体の spell は無効にする
 opt.spell = false
-
--- tags
--- カレントディレクトリから上へ .tags を探す
-opt.tags = ".tags;" .. vim.env.HOME
