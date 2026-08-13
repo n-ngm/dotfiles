@@ -32,8 +32,6 @@ alias dcsd='docker stop $(docker ps -a -q)'
 # vim aliases
 alias vim='nvim'
 alias vimdiff='nvim -d '
-alias lvim='NVIM_APPNAME=lazyvim nvim'
-alias lazyvim='NVIM_APPNAME=lazyvim nvim'
 
 # one liner command
 alias strip-comment="sed -e 's|//.*||' -e 's|/\*.*\*/||g'"
