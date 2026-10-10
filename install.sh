@@ -26,9 +26,14 @@ fi
 
 # Linux only
 if [ "$OS" = "Linux" ]; then
-  # fcitx5 replaces the file on save, so copy instead of symlink
-  mkdir -p .config/fcitx5
+  # fcitx5 replaces the files on save, so copy instead of symlink
+  mkdir -p .config/fcitx5/conf
   cp $SCRIPT_DIR/.config/fcitx5/profile .config/fcitx5/profile
+  cp $SCRIPT_DIR/.config/fcitx5/config  .config/fcitx5/config
+  cp $SCRIPT_DIR/.config/fcitx5/conf/mozc.conf      .config/fcitx5/conf/mozc.conf
+  cp $SCRIPT_DIR/.config/fcitx5/conf/waylandim.conf .config/fcitx5/conf/waylandim.conf
+  mkdir -p .config/environment.d
+  ln -snf $SCRIPT_DIR/.config/environment.d/fcitx5.conf .config/environment.d/fcitx5.conf
 fi
 
 cd $HOME
