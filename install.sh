@@ -24,6 +24,13 @@ if [ "$OS" = "Darwin" ]; then
   ln -snf $SCRIPT_DIR/.zprofile  .zprofile
 fi
 
+# Linux only
+if [ "$OS" = "Linux" ]; then
+  # fcitx5 replaces the file on save, so copy instead of symlink
+  mkdir -p .config/fcitx5
+  cp $SCRIPT_DIR/.config/fcitx5/profile .config/fcitx5/profile
+fi
+
 cd $HOME
 mkdir -p .config/sheldon
 ln -snf $SCRIPT_DIR/.config/sheldon/plugins.toml .config/sheldon/plugins.toml
