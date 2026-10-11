@@ -28,16 +28,18 @@
     ],
     "deny": [
       "Bash(sudo:*)",
-      "Read(id_rsa)",
-      "Read(id_ed25519)",
-      "Read(.env)"
+      "Read(~/.ssh/**)",
+      "Read(.env)",
+      "Read(.credentials.json)",
+      "Read(~/.claude/.credentials.json)"
     ],
     "ask": [
       "WebFetch(domain:*)",
       "Bash(git push:*)",
       "Bash(git revert:*)",
-      "Read(**/*key*)",
-      "Read(**/*token*)",
+      "Read(*key*)",
+      "Read(*token*)",
+      "Read(.env.*)",
       "Bash(rm:*)",
       "Bash(rm -rf:*)",
       "mcp__github__add_*",
