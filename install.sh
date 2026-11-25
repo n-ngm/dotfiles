@@ -34,9 +34,10 @@ if [ "$OS" = "Linux" ]; then
   cp $SCRIPT_DIR/.config/fcitx5/conf/waylandim.conf .config/fcitx5/conf/waylandim.conf
   mkdir -p .config/environment.d
   ln -snf $SCRIPT_DIR/.config/environment.d/fcitx5.conf .config/environment.d/fcitx5.conf
-  # Ptyxis stores its settings in dconf, not in files
+  # Ptyxis and GNOME Terminal store their settings in dconf, not in files
   if command -v dconf >/dev/null 2>&1; then
     dconf load /org/gnome/Ptyxis/ < $SCRIPT_DIR/dconf/ptyxis.ini
+    dconf load /org/gnome/terminal/ < $SCRIPT_DIR/dconf/gnome-terminal.ini
   fi
 fi
 
